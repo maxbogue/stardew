@@ -1,0 +1,70 @@
+{
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true,
+        "mocha": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:vue/recommended",
+        "plugin:prettier/recommended",
+        "plugin:lodash-fp/recommended"
+    ],
+    "plugins": [
+      "sort-imports-es6-autofix"
+    ],
+    "parserOptions": {
+        "parser": "babel-eslint",
+        "ecmaVersion": 8,
+        "sourceType": "module"
+    },
+    "rules": {
+        "block-scoped-var": ["error"],
+        "complexity": ["error"],
+        "consistent-return": ["error"],
+        "curly": ["error"],
+        "dot-notation": ["error"],
+        "eqeqeq": ["error"],
+        "guard-for-in": ["error"],
+        "linebreak-style": ["error", "unix"],
+        "max-depth": ["error", 5],
+        "no-await-in-loop": ["error"],
+        "no-bitwise": ["error"],
+        "no-caller": ["error"],
+        "no-console": ["error", { "allow": ["warn", "error"] }],
+        "no-else-return": ["error"],
+        "no-eq-null": ["error"],
+        "no-eval": ["error"],
+        "no-extend-native": ["error"],
+        "no-extra-bind": ["error"],
+        "no-implicit-coercion": ["error"],
+        "no-implied-eval": ["error"],
+        "no-invalid-this": ["error"],
+        "no-loop-func": ["error"],
+        "no-prototype-builtins": ["error"],
+        "no-sequences": ["error"],
+        "no-shadow": ["error"],
+        "no-template-curly-in-string": ["error"],
+        "no-var": ["error"],
+        "prefer-const": ["error"],
+        "require-atomic-updates": ["error"],
+
+        "sort-imports-es6-autofix/sort-imports-es6": [2, {
+          "ignoreCase": false,
+          "ignoreMemberSort": false,
+          "memberSyntaxSortOrder": ["none", "all", "single", "multiple"]
+        }],
+
+        "vue/attributes-order": ["off"],
+        "vue/component-name-in-template-casing": ["error", "kebab-case"],
+        "vue/html-closing-bracket-spacing": ["off"],
+        "vue/html-closing-bracket-newline": ["off"],
+        "vue/html-indent": ["off"],
+        "vue/html-self-closing": ["off"],
+        "vue/max-attributes-per-line": ["off"],
+        "vue/multiline-html-element-content-newline": ["off"],
+        "vue/no-v-html": ["off"],
+        "vue/singleline-html-element-content-newline": ["off"]
+    }
+}

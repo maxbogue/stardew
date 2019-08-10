@@ -1,0 +1,65 @@
+{
+  "name": "Stardew",
+  "description": "A Vue.js project",
+  "version": "0.1.0",
+  "author": "Max Bogue <max@maxbogue.com>",
+  "private": true,
+  "scripts": {
+    "dev": "webpack --mode development --watch --progress",
+    "build": "NODE_ENV=production webpack --mode production --progress --hide-modules"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.vue": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "normalize.css": "^8.0.1",
+    "vue": "^2.6.10",
+    "vue-material": "^1.0.0-beta-7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "babel-eslint": "^10.0.2",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.2.0",
+    "eslint": "^6.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-lodash-fp": "^2.2.0-a1",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-sort-imports-es6-autofix": "^0.4.0",
+    "eslint-plugin-vue": "^5.2.3",
+    "file-loader": "^4.2.0",
+    "husky": "^3.0.3",
+    "lint-staged": "^9.2.1",
+    "prettier": "^1.18.2",
+    "sass": "^1.22.9",
+    "sass-loader": "^7.2.0",
+    "source-map-loader": "^0.2.4",
+    "style-loader": "^1.0.0",
+    "stylelint": "^10.1.0",
+    "stylelint-config-property-sort-order-smacss": "^5.0.0",
+    "stylelint-config-recommended-scss": "^3.3.0",
+    "stylelint-config-standard": "^18.3.0",
+    "stylelint-processor-html": "^1.0.0",
+    "stylelint-scss": "^3.9.3",
+    "url-loader": "^2.1.0",
+    "vue-loader": "^15.7.1",
+    "vue-template-compiler": "^2.6.10",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
+  }
+}
