@@ -2,7 +2,7 @@
   {
     "name": "Amaranth",
     "season": 3,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 70,
     "sellPrice": 150,
     "yield": 1,
@@ -12,7 +12,7 @@
   {
     "name": "Ancient Fruit",
     "season": 1,
-    "category": "Fruit",
+    "category": "fruit",
     "sellPrice": 550,
     "yield": 1,
     "growth": 28,
@@ -22,7 +22,7 @@
   {
     "name": "Artichoke",
     "season": 3,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 30,
     "sellPrice": 160,
     "yield": 1,
@@ -32,7 +32,7 @@
   {
     "name": "Beet",
     "season": 3,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 20,
     "sellPrice": 100,
     "yield": 1,
@@ -42,7 +42,7 @@
   {
     "name": "Blueberry",
     "season": 2,
-    "category": "Fruit",
+    "category": "fruit",
     "seedPrice": 80,
     "sellPrice": 50,
     "yield": 3,
@@ -53,7 +53,7 @@
   {
     "name": "Bok Choy",
     "season": 3,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 50,
     "sellPrice": 80,
     "yield": 1,
@@ -63,7 +63,7 @@
   {
     "name": "Cauliflower",
     "season": 1,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 80,
     "sellPrice": 175,
     "yield": 1,
@@ -73,9 +73,10 @@
   {
     "name": "Coffee Bean",
     "season": 1,
-    "category": "Other",
+    "category": "other",
     "seedPrice": 15,
     "sellPrice": 15,
+    "kegSellPrice": 30,
     "yield": 4,
     "growth": 10,
     "regrowth": 2,
@@ -84,7 +85,7 @@
   {
     "name": "Corn",
     "season": 2,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 150,
     "sellPrice": 50,
     "yield": 1,
@@ -95,7 +96,7 @@
   {
     "name": "Cranberry",
     "season": 3,
-    "category": "Fruit",
+    "category": "fruit",
     "seedPrice": 240,
     "sellPrice": 75,
     "yield": 2,
@@ -106,7 +107,7 @@
   {
     "name": "Eggplant",
     "season": 3,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 20,
     "sellPrice": 60,
     "yield": 1,
@@ -117,7 +118,7 @@
   {
     "name": "Garlic",
     "season": 1,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 40,
     "sellPrice": 60,
     "yield": 1,
@@ -127,7 +128,7 @@
   {
     "name": "Grape",
     "season": 3,
-    "category": "Fruit",
+    "category": "fruit",
     "seedPrice": 60,
     "sellPrice": 80,
     "yield": 1,
@@ -138,7 +139,7 @@
   {
     "name": "Green Bean",
     "season": 1,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 60,
     "sellPrice": 40,
     "yield": 1,
@@ -149,9 +150,10 @@
   {
     "name": "Hops",
     "season": 2,
-    "category": "Other",
+    "category": "veg",
     "seedPrice": 60,
     "sellPrice": 25,
+    "kegSellPrice": 300,
     "yield": 1,
     "growth": 11,
     "regrowth": 1,
@@ -160,7 +162,7 @@
   {
     "name": "Hot Pepper",
     "season": 2,
-    "category": "Fruit",
+    "category": "fruit",
     "seedPrice": 40,
     "sellPrice": 40,
     "yield": 1,
@@ -171,7 +173,7 @@
   {
     "name": "Kale",
     "season": 1,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 70,
     "sellPrice": 110,
     "yield": 1,
@@ -181,7 +183,7 @@
   {
     "name": "Melon",
     "season": 2,
-    "category": "Fruit",
+    "category": "fruit",
     "seedPrice": 80,
     "sellPrice": 250,
     "yield": 1,
@@ -191,7 +193,7 @@
   {
     "name": "Parsnip",
     "season": 1,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 20,
     "sellPrice": 35,
     "yield": 1,
@@ -201,7 +203,7 @@
   {
     "name": "Potato",
     "season": 1,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 50,
     "sellPrice": 80,
     "yield": 1.25,
@@ -211,7 +213,7 @@
   {
     "name": "Pumpkin",
     "season": 3,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 100,
     "sellPrice": 320,
     "yield": 1,
@@ -221,7 +223,7 @@
   {
     "name": "Radish",
     "season": 2,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 40,
     "sellPrice": 90,
     "yield": 1,
@@ -231,7 +233,7 @@
   {
     "name": "Red Cabbage",
     "season": 2,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 100,
     "sellPrice": 260,
     "yield": 1,
@@ -241,7 +243,7 @@
   {
     "name": "Rhubarb",
     "season": 1,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 100,
     "sellPrice": 220,
     "yield": 1,
@@ -251,7 +253,7 @@
   {
     "name": "Starfruit",
     "season": 2,
-    "category": "Fruit",
+    "category": "fruit",
     "seedPrice": 400,
     "sellPrice": 750,
     "yield": 1,
@@ -261,7 +263,7 @@
   {
     "name": "Strawberry",
     "season": 1,
-    "category": "Fruit",
+    "category": "fruit",
     "seedPrice": 100,
     "sellPrice": 120,
     "yield": 1,
@@ -272,7 +274,7 @@
   {
     "name": "Sweet Gem Berry",
     "season": 3,
-    "category": "Other",
+    "category": "other",
     "sellPrice": 3000,
     "yield": 1,
     "growth": 24,
@@ -281,7 +283,7 @@
   {
     "name": "Sweet Gem Berry (cart)",
     "season": 3,
-    "category": "Other",
+    "category": "other",
     "seedPrice": 1000,
     "sellPrice": 3000,
     "yield": 1,
@@ -291,7 +293,7 @@
   {
     "name": "Tomato",
     "season": 2,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 50,
     "sellPrice": 60,
     "yield": 1,
@@ -302,17 +304,18 @@
   {
     "name": "Wheat",
     "season": 2,
-    "category": "Other",
+    "category": "veg",
     "seedPrice": 10,
     "sellPrice": 25,
+    "kegSellPrice": 200,
     "yield": 1,
     "growth": 4,
-    "seasons": 1
+    "seasons": 2
   },
   {
     "name": "Yam",
     "season": 3,
-    "category": "Veg",
+    "category": "veg",
     "seedPrice": 60,
     "sellPrice": 160,
     "yield": 1,
