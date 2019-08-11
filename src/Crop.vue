@@ -1,21 +1,23 @@
 <template>
   <div :class="$style.crop">
-    <div>Test Crop</div>
+    <div>{{ crop.name }} {{ roundedGPerDay }}</div>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    numBars: { type: Number, required: true },
-    samplesPerBar: { type: Number, required: true },
+    crop: { type: Object, required: true },
   },
-  data: () => ({}),
-  watch: {
-    numBars: 'computePeaks',
-    samplesPerBar: 'computePeaks',
-    audioBuffer: 'computePeaks',
+  computed: {
+    roundedGPerDay() {
+      return this.crop.gPerDay.toFixed(2);
+    },
   },
-  methods: {},
 };
 </script>
+
+<style lang="scss" module>
+.crop {
+}
+</style>

@@ -1,72 +1,69 @@
 <template>
-  <form :class="$style.container" @submit.prevent="render">
-    <div :class="$style.controls">
-      <crop />
-      <md-field>
-        <label>Row Height</label>
-        <md-input type="number" v-model.number="rowHeight" />
-      </md-field>
-      <md-field>
-        <label>Number of Rows</label>
-        <md-input type="number" v-model.number="numRows" />
-      </md-field>
-      <md-field>
-        <label>Bars Per Row</label>
-        <md-input type="number" v-model.number="barsPerRow" />
-      </md-field>
-      <md-field>
-        <label>Samples Per Bar</label>
-        <md-input type="number" v-model.number="samplesPerBar" />
-      </md-field>
-      <md-field>
-        <label>Row Spacing</label>
-        <md-input type="number" v-model.number="rowSpacing" />
-      </md-field>
-    </div>
-    <div :class="$style.display">
-      <div :class="$style.row">
-        <load-audio
-          :num-bars="numBars"
-          :samples-per-bar="samplesPerBar"
-          @update="updatePeaks"
-          @progress="updatePeaksProgress"
-        />
-        <md-button type="submit" class="md-raised md-primary" :disabled="!peaks"
-          >Render</md-button
-        >
-      </div>
-      <md-progress-bar
-        v-if="peaksProgress >= 0"
-        md-mode="buffer"
-        :md-value="renderProgress"
-        :md-buffer="peaksProgress"
-      />
-      <waveform
-        :can-download-svg="true"
-        :peaks="peaks"
-        :num-rows="numRows"
-        :row-height="rowHeight"
-        :bars-per-row="barsPerRow"
-        :row-spacing="rowSpacing"
-        :render-signal="renderSignal"
-        @progress="updateRenderProgress"
-      />
-    </div>
-  </form>
+  <div :class="$style.container">
+    <MdField>
+      <label for="season">Season</label>
+      <MdSelect v-model="seasonName" name="season" id="season">
+        <MdOption value="greenhouse">Greenhouse</MdOption>
+        <MdOption value="spring">Spring</MdOption>
+        <MdOption value="summer">Summer</MdOption>
+        <MdOption value="fall">Fall</MdOption>
+      </MdSelect>
+    </MdField>
+    <MdField>
+      <label for="speed-gro">Speed-Gro</label>
+      <MdSelect v-model="fertilizer" name="speed-gro" id="speed-gro">
+        <MdOption value="none">None</MdOption>
+        <MdOption value="speedGro">Speed-Gro</MdOption>
+        <MdOption value="deluxeSpeedGro">Deluxe Speed-Gro</MdOption>
+      </MdSelect>
+    </MdField>
+    <crop v-for="crop in sortedCrops" :crop="crop" :key="crop.name" />
+    <ul>
+      <li>
+        If seeds cannot be regularly bought, their price is calculated from a
+        normal crop put in the seed maker.
+      </li>
+      <li>
+        The existence of higher quality crops and farming skills are ignored
+        because they always affect crops proportionally.
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
+import { sortBy } from 'lodash/fp';
+
 import Crop from './Crop.vue';
 import baseCrops from './crops.json';
+import { growsInSeason, processCrop } from './crop';
+
+const seasonFromName = seasonName =>
+  ['greenhouse', 'spring', 'summer', 'fall'].indexOf(seasonName);
 
 export default {
   components: {
     Crop,
   },
   data: () => ({
-    crops: baseCrops,
+    baseCrops,
+    seasonName: 'greenhouse',
+    fertilizer: 'none',
   }),
-  computed: {},
+  computed: {
+    season() {
+      return seasonFromName(this.seasonName);
+    },
+    crops() {
+      return this.baseCrops.map(processCrop(this.season, this.fertilizer));
+    },
+    filteredCrops() {
+      return this.crops.filter(growsInSeason(this.season));
+    },
+    sortedCrops() {
+      return sortBy('gPerDay', this.filteredCrops).reverse();
+    },
+  },
   methods: {},
 };
 </script>
@@ -75,29 +72,5 @@ export default {
 .container {
   margin: 20px auto;
   width: 820px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.controls {
-  width: 200px;
-}
-
-.display {
-  width: 600px;
-}
-
-.row {
-  display: flex;
-  align-items: center;
-
-  > :first-child {
-    margin: 0 20px 20px 0;
-  }
-
-  > :last-child {
-    margin: 0 0 20px 20px;
-  }
 }
 </style>

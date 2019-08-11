@@ -27,7 +27,7 @@
     "lodash": "^4.17.15",
     "normalize.css": "^8.0.1",
     "vue": "^2.6.10",
-    "vue-material": "^1.0.0-beta-7"
+    "vue-material": "1.0.0-beta-11"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
