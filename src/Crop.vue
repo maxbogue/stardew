@@ -27,7 +27,12 @@
       </template>
       <template v-if="crop.harvests">
         <span>Harvests</span>
-        <span>{{ crop.harvests }}</span>
+        <span
+          >{{ crop.harvests
+          }}<template v-if="crop.yield > 1"
+            >x{{ crop.yield }}</template
+          ></span
+        >
       </template>
       <span>Revenue</span>
       <span>{{ crop.revenue }}g</span>

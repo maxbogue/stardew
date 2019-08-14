@@ -74,6 +74,7 @@ const addGreenhouseGPerDay = (crop, fertilizer) => {
 export const createCrop = (season, fertilizerName, processing) => baseCrop => {
   const fertilizer = FERTILIZERS[fertilizerName];
   const crop = { ...baseCrop };
+  crop.key = crop.name;
 
   adjustForProcessing(crop, processing);
 

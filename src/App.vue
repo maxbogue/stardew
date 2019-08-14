@@ -38,16 +38,28 @@
         :crop="crop"
         :season-name="seasonName"
         :max-g-per-day="sortedCrops[0].gPerDay"
-        :key="crop.name"
+        :key="crop.key"
       />
     </div>
     <ul :class="$style.notes" class="md-elevation-4">
+      <li>
+        Multi-season crops are calculated assuming they are planted for all
+        their seasons.
+      </li>
+      <li>
+        Greenhouse calculations ignore the initial growth period of crops with
+        regrowth since they will never need to be replanted.
+      </li>
+      <li>
+        The "Either" processing setting only displays the most valuable option.
+      </li>
       <li>
         If seeds cannot be regularly bought, their price is calculated from a
         normal crop put in the seed maker.
       </li>
       <li>
-        The existence of higher quality crops and farming skills are ignored.
+        The existence of higher quality crops and farming skills are ignored
+        since they affect crops proportionally.
       </li>
       <li>
         Time involved in jar/keg processing is ignored.
