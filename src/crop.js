@@ -29,34 +29,13 @@ const getKegSellPrice = ({ category, sellPrice, kegSellPrice }) => {
   return sellPrice;
 };
 
-const getHarvests = ({ seasons, growth, regrowth }) => {
-  const daysForGrowth = seasons * 28 - 1;
-  const daysAfterGrowth = daysForGrowth - growth;
-  return 1 + Math.floor(daysAfterGrowth / (regrowth || growth));
-};
-
-const getSeasonalGPerDay = (crop, fertilizer) => {
-  const revenue = crop.sellPrice * crop.yield * crop.harvests;
-  const plantings = crop.regrowth ? 1 : crop.harvests;
-  const cost = crop.seedPrice * plantings + fertilizer.cost;
-  return (revenue - cost) / (crop.seasons * 28);
-};
-
-const getGreenhouseGPerDay = (crop, fertilizer) => {
-  const revenue = crop.sellPrice * crop.yield;
-  // Amortized cost of infinte regrowth is 0.
-  const cost = crop.regrowth ? 0 : crop.seedPrice + fertilizer.cost;
-  return (revenue - cost) / (crop.regrowth || crop.growth);
-};
-
-export const processCrop = (season, fertilizerName, processing) => baseCrop => {
-  const fertilizer = FERTILIZERS[fertilizerName];
-  const crop = { ...baseCrop };
-
+const adjustForProcessing = (crop, processing) => {
   if (processing === 'jar') {
     crop.sellPrice = getJarSellPrice(crop);
+    crop.name += ' (jar)';
   } else if (processing === 'keg') {
     crop.sellPrice = getKegSellPrice(crop);
+    crop.name += ' (keg)';
   } else if (processing === 'either') {
     const jarSellPrice = getJarSellPrice(crop);
     const kegSellPrice = getKegSellPrice(crop);
@@ -70,20 +49,52 @@ export const processCrop = (season, fertilizerName, processing) => baseCrop => {
       }
     }
   }
+};
+
+const getHarvests = ({ seasons, growth, regrowth }) => {
+  const daysForGrowth = seasons * 28 - 1;
+  const daysAfterGrowth = daysForGrowth - growth;
+  return 1 + Math.floor(daysAfterGrowth / (regrowth || growth));
+};
+
+const addSeasonalGPerDay = (crop, fertilizer) => {
+  crop.harvests = getHarvests(crop);
+  crop.revenue = crop.sellPrice * crop.yield * crop.harvests;
+  const plantings = crop.regrowth ? 1 : crop.harvests;
+  crop.costs = crop.seedPrice * plantings + fertilizer.cost;
+  crop.profit = crop.revenue - crop.costs;
+  crop.gPerDay = crop.profit / (crop.seasons * 28);
+};
+
+const addGreenhouseGPerDay = (crop, fertilizer) => {
+  crop.revenue = crop.sellPrice * crop.yield;
+  // Amortized cost of infinte regrowth is 0.
+  crop.costs = crop.regrowth ? 0 : crop.seedPrice + fertilizer.cost;
+  crop.gPerDay = (crop.revenue - crop.costs) / (crop.regrowth || crop.growth);
+};
+
+export const createCrop = (season, fertilizerName, processing) => baseCrop => {
+  const fertilizer = FERTILIZERS[fertilizerName];
+  const crop = { ...baseCrop };
+
+  adjustForProcessing(crop, processing);
 
   if (!crop.seedPrice) {
-    crop.seedPrice = crop.sellPrice / SEED_MAKER_AVERAGE_YIELD;
+    crop.seedPrice = Math.floor(crop.sellPrice / SEED_MAKER_AVERAGE_YIELD);
   }
+
   if (season && crop.seasons > 1) {
     crop.name += ` (${crop.seasons} seasons)`;
   }
+
   crop.growth = Math.floor(crop.growth * fertilizer.speed);
+
   if (season) {
-    crop.harvests = getHarvests(crop);
-    crop.gPerDay = getSeasonalGPerDay(crop, fertilizer);
+    addSeasonalGPerDay(crop, fertilizer);
   } else {
-    crop.gPerDay = getGreenhouseGPerDay(crop, fertilizer);
+    addGreenhouseGPerDay(crop, fertilizer);
   }
+
   return crop;
 };
 
