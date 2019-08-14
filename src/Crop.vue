@@ -6,11 +6,13 @@
       :style="barStyles"
       @click="showInfo = !showInfo"
     >
-      <span>{{ crop.name }}</span>
       <div>
-        <span>{{ roundedGPerDay }}</span>
-        <span>g/day</span>
+        <span>{{ name }}</span>
+        <span v-if="parenthetical" :class="$style.parenthetical">{{
+          parenthetical
+        }}</span>
       </div>
+      <span>{{ roundedGPerDay }}</span>
     </div>
     <div v-if="showInfo" :class="$style.info">
       <span>Seed Price</span>
@@ -42,6 +44,8 @@
 </template>
 
 <script>
+const PAREN_RE = /^(.*) \((.*)\)$/;
+
 export default {
   props: {
     crop: { type: Object, required: true },
@@ -52,6 +56,16 @@ export default {
     showInfo: false,
   }),
   computed: {
+    name() {
+      return PAREN_RE.test(this.crop.name)
+        ? this.crop.name.match(PAREN_RE)[1]
+        : this.crop.name;
+    },
+    parenthetical() {
+      return PAREN_RE.test(this.crop.name)
+        ? this.crop.name.match(PAREN_RE)[2]
+        : '';
+    },
     roundedGPerDay() {
       return this.crop.gPerDay.toFixed(2);
     },
@@ -72,19 +86,23 @@ export default {
   margin: 4px 0;
 
   &--greenhouse {
-    --bar-color: rgba(174, 213, 129, 0.5);
+    --bar-color: hsla(88, 50%, 67%, 0.5);
+    --bar-color-dark: hsla(88, 50%, 67%, 0.7);
   }
 
   &--spring {
-    --bar-color: rgba(240, 98, 145, 0.5);
+    --bar-color: hsla(340, 82%, 76%, 0.5);
+    --bar-color-dark: hsla(340, 82%, 76%, 0.7);
   }
 
   &--summer {
-    --bar-color: rgba(79, 194, 247, 0.5);
+    --bar-color: hsla(202, 92%, 74%, 0.5);
+    --bar-color-dark: hsla(202, 92%, 74%, 0.7);
   }
 
   &--fall {
-    --bar-color: rgba(255, 183, 77, 0.5);
+    --bar-color: hsla(42, 100%, 65%, 0.5);
+    --bar-color-dark: hsla(42, 100%, 65%, 0.7);
   }
 }
 
@@ -98,6 +116,11 @@ export default {
   background-color: var(--bar-color);
   font-size: 1.2em;
 
+  &:hover {
+    cursor: pointer;
+    background-color: var(--bar-color-dark);
+  }
+
   &::before {
     content: '';
     background-color: var(--bar-color);
@@ -107,6 +130,11 @@ export default {
     left: 0;
     z-index: -1;
   }
+}
+
+.parenthetical {
+  font-size: 0.6em;
+  text-transform: uppercase;
 }
 
 .info {

@@ -32,10 +32,8 @@ const getKegSellPrice = ({ category, sellPrice, kegSellPrice }) => {
 const adjustForProcessing = (crop, processing) => {
   if (processing === 'jar') {
     crop.sellPrice = getJarSellPrice(crop);
-    crop.name += ' (jar)';
   } else if (processing === 'keg') {
     crop.sellPrice = getKegSellPrice(crop);
-    crop.name += ' (keg)';
   } else if (processing === 'either') {
     const jarSellPrice = getJarSellPrice(crop);
     const kegSellPrice = getKegSellPrice(crop);
@@ -87,6 +85,7 @@ export const createCrop = (season, fertilizerName, processing) => baseCrop => {
     crop.name += ` (${crop.seasons} seasons)`;
   }
 
+  crop.name = crop.name.replace(') (', ', ');
   crop.growth = Math.floor(crop.growth * fertilizer.speed);
 
   if (season) {

@@ -281,16 +281,6 @@
     "seasons": 1
   },
   {
-    "name": "Sweet Gem Berry (cart)",
-    "season": 3,
-    "category": "other",
-    "seedPrice": 1000,
-    "sellPrice": 3000,
-    "yield": 1,
-    "growth": 24,
-    "seasons": 1
-  },
-  {
     "name": "Tomato",
     "season": 2,
     "category": "veg",

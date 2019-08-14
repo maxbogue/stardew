@@ -28,7 +28,10 @@
         </select>
       </label>
     </div>
-    <h2>{{ seasonName | capitalize }} g/day</h2>
+    <div :class="$style.header">
+      <span>Crop</span>
+      <span>g/day</span>
+    </div>
     <div :class="[$style.crops, $style.card]" class="md-elevation-4">
       <crop
         v-for="crop in sortedCrops"
@@ -44,8 +47,7 @@
         normal crop put in the seed maker.
       </li>
       <li>
-        The existence of higher quality crops and farming skills are ignored
-        because they always affect crops proportionally.
+        The existence of higher quality crops and farming skills are ignored.
       </li>
       <li>
         Time involved in jar/keg processing is ignored.
@@ -105,17 +107,14 @@ export default {
 
 <style lang="scss" module>
 .container {
-  margin: 0 auto 20px;
+  margin: 1em auto 0;
   width: 820px;
-
-  > * {
-    margin-top: 1em;
-  }
 }
 
 .card {
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14),
     0 1px 10px 0 rgba(0, 0, 0, 0.12);
+  margin-bottom: 1em;
 }
 
 .controls {
@@ -134,10 +133,18 @@ export default {
   }
 
   select {
-    border-radius: 0;
     font-size: 1em;
+    font-weight: 500;
     width: 100%;
   }
+}
+
+.header {
+  font-size: 1.5em;
+  font-weight: 400;
+  display: flex;
+  margin: 1em 8px 4px;
+  justify-content: space-between;
 }
 
 .crops {
@@ -146,5 +153,8 @@ export default {
 }
 
 .notes {
+  margin: 1em;
+  padding-left: 1em;
+  line-height: 1.4;
 }
 </style>
