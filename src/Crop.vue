@@ -7,44 +7,52 @@
       @click="showInfo = !showInfo"
     >
       <div>
-        <span>{{ name }}</span>
+        <span :class="$style.name">{{ name }}</span>
         <span v-if="parenthetical" :class="$style.parenthetical">{{
           parenthetical
         }}</span>
       </div>
       <span>{{ roundedGPerDay }}</span>
     </div>
-    <div v-if="showInfo" :class="$style.info">
-      <span>Seed Price</span>
-      <span>{{ crop.seedPrice }}g</span>
-      <span>Sell Price</span>
-      <span>{{ crop.sellPrice }}g</span>
-      <span>Growth</span>
-      <span>{{ crop.growth }} days</span>
-      <template v-if="crop.regrowth">
-        <span>Regrowth</span>
-        <span>{{ crop.regrowth }} days</span>
-      </template>
-      <template v-if="crop.harvests">
-        <span>Harvests</span>
-        <span
-          >{{ crop.harvests
+    <ul v-if="showInfo" :class="$style.infos">
+      <li :class="$style.info">
+        <div>Seed Price</div>
+        <div>{{ crop.seedPrice }}g</div>
+      </li>
+      <li :class="$style.info">
+        <div>Sell Price</div>
+        <div>{{ crop.sellPrice }}g</div>
+      </li>
+      <li :class="$style.info">
+        <div>Growth</div>
+        <div>{{ crop.growth }} days</div>
+      </li>
+      <li v-if="crop.regrowth" :class="$style.info">
+        <div>Regrowth</div>
+        <div>{{ crop.regrowth }} days</div>
+      </li>
+      <li v-if="crop.harvests" :class="$style.info">
+        <div>Harvests</div>
+        <div>
+          {{ crop.harvests
           }}<template v-if="crop.yield > 1"
             >x{{ crop.yield }}</template
-          ></span
-        >
-      </template>
-      <span>Revenue</span>
-      <span>{{ crop.revenue }}g</span>
-      <span>Costs</span>
-      <span>{{ crop.costs }}g</span>
-      <template v-if="crop.profit">
-        <span>Profit</span>
-        <span>{{ crop.profit }}g</span>
-      </template>
-      <span>g/day</span>
-      <span>{{ roundedGPerDay }}</span>
-    </div>
+          >
+        </div>
+      </li>
+      <li :class="$style.info">
+        <div>Revenue</div>
+        <div>{{ crop.revenue }}g</div>
+      </li>
+      <li :class="$style.info">
+        <div>Costs</div>
+        <div>{{ crop.costs }}g</div>
+      </li>
+      <li v-if="crop.profit" :class="$style.info">
+        <div>Profit</div>
+        <div>{{ crop.profit }}g</div>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -137,22 +145,35 @@ export default {
   }
 }
 
+.name {
+  white-space: nowrap;
+}
+
 .parenthetical {
   font-size: 0.6em;
   text-transform: uppercase;
 }
 
-.info {
+.infos {
   display: grid;
-  grid-auto-flow: column;
-  grid-template-rows: auto auto;
-  padding: 8px 4px 4px;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  margin: 0;
+  padding: 4px 0 0;
+  list-style: none;
+}
 
-  > :nth-child(odd) {
+.info {
+  padding: 4px;
+
+  > * {
+    white-space: nowrap;
+  }
+
+  :first-child {
     font-size: 0.75em;
   }
 
-  > :nth-child(even) {
+  :last-child {
     font-size: 1.5em;
   }
 }

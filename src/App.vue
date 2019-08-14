@@ -47,19 +47,23 @@
         their seasons.
       </li>
       <li>
-        Greenhouse calculations ignore the initial growth period of crops with
-        regrowth since they will never need to be replanted.
+        Prices for seeds and fertilizers are based on the cheapest option
+        between Pierre's, Joja, and Oasis.
+      </li>
+      <li>
+        If seeds cannot be regularly bought, their price is calculated based on
+        a normal crop in the seed maker.
+      </li>
+      <li>
+        Greenhouse values ignore the initial growth period of crops with
+        regrowth since they last forever.
       </li>
       <li>
         The "Either" processing setting only displays the most valuable option.
       </li>
       <li>
-        If seeds cannot be regularly bought, their price is calculated from a
-        normal crop put in the seed maker.
-      </li>
-      <li>
         The existence of higher quality crops and farming skills are ignored
-        since they affect crops proportionally.
+        since they affect crops almost the same.
       </li>
       <li>
         Time involved in jar/keg processing is ignored.
@@ -120,7 +124,7 @@ export default {
 <style lang="scss" module>
 .container {
   margin: 1em auto 0;
-  width: 820px;
+  max-width: 820px;
 }
 
 .card {
@@ -131,12 +135,17 @@ export default {
 
 .controls {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   padding: 0.5em;
 
   > * {
     flex: 1;
-    margin: 0.5em;
+    padding: 0.5em;
+
+    @media (max-width: 450px) {
+      min-width: 100%;
+    }
   }
 
   label > div {
