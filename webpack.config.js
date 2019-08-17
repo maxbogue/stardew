@@ -13,7 +13,7 @@ module.exports = {
     app: './src/app.js',
   },
   output: {
-    path: path.resolve(__dirname, 'dist/js'),
+    path: path.resolve(__dirname, 'dist'),
   },
   module: {
     rules: [

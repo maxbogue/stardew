@@ -67,7 +67,9 @@ const addSeasonalGPerDay = (crop, fertilizer) => {
 const addGreenhouseGPerDay = (crop, fertilizer) => {
   crop.revenue = crop.sellPrice * crop.yield;
   // Amortized cost of infinte regrowth is 0.
-  crop.costs = crop.regrowth ? 0 : crop.seedPrice + fertilizer.cost;
+  crop.costs = crop.regrowth
+    ? 0
+    : crop.seedPrice + (fertilizer.cost * crop.growth) / 28;
   crop.gPerDay = (crop.revenue - crop.costs) / (crop.regrowth || crop.growth);
 };
 

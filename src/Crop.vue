@@ -1,7 +1,7 @@
 <template>
   <div :class="[$style.crop, $style['crop--' + seasonName]]">
     <div
-      role="buttom"
+      role="button"
       :class="$style.bar"
       :style="barStyles"
       @click="showInfo = !showInfo"
@@ -121,7 +121,6 @@ export default {
 
 .bar {
   position: relative;
-  height: 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -141,7 +140,10 @@ export default {
     width: var(--bar-width);
     position: absolute;
     left: 0;
-    z-index: -1;
+  }
+
+  > * {
+    z-index: 1;
   }
 }
 

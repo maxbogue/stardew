@@ -1,38 +1,41 @@
 <template>
   <div :class="$style.container">
-    <div :class="[$style.controls, $style.card]">
-      <label>
-        <div>Season</div>
-        <select v-model="seasonName">
-          <option value="greenhouse">Greenhouse</option>
-          <option value="spring">Spring</option>
-          <option value="summer">Summer</option>
-          <option value="fall">Fall</option>
-        </select>
-      </label>
-      <label>
-        <div>Speed-Gro</div>
-        <select v-model="fertilizer">
-          <option value="none">None</option>
-          <option value="speedGro">Speed-Gro</option>
-          <option value="deluxeSpeedGro">Deluxe Speed-Gro</option>
-        </select>
-      </label>
-      <label>
-        <div>Processing</div>
-        <select v-model="processing">
-          <option value="none">None</option>
-          <option value="jar">Jar</option>
-          <option value="keg">Keg</option>
-          <option value="either">Either</option>
-        </select>
-      </label>
+    <div :class="$style.card">
+      <h1>Stardew Crops</h1>
+      <div :class="$style.controls">
+        <label>
+          <div>Season</div>
+          <select v-model="seasonName">
+            <option value="greenhouse">Greenhouse</option>
+            <option value="spring">Spring</option>
+            <option value="summer">Summer</option>
+            <option value="fall">Fall</option>
+          </select>
+        </label>
+        <label>
+          <div>Speed-Gro</div>
+          <select v-model="fertilizer">
+            <option value="none">None</option>
+            <option value="speedGro">Speed-Gro</option>
+            <option value="deluxeSpeedGro">Deluxe Speed-Gro</option>
+          </select>
+        </label>
+        <label>
+          <div>Processing</div>
+          <select v-model="processing">
+            <option value="none">None</option>
+            <option value="jar">Jar</option>
+            <option value="keg">Keg</option>
+            <option value="either">Either</option>
+          </select>
+        </label>
+      </div>
     </div>
-    <div :class="$style.header">
-      <span>Crop</span>
-      <span>g/day</span>
-    </div>
-    <div :class="[$style.crops, $style.card]" class="md-elevation-4">
+    <div :class="[$style.card, $style.crops]">
+      <h2 :class="$style.cropsHeader">
+        <span>Crop</span>
+        <span>g/day</span>
+      </h2>
       <crop
         v-for="crop in sortedCrops"
         :crop="crop"
@@ -41,34 +44,37 @@
         :key="crop.key"
       />
     </div>
-    <ul :class="$style.notes" class="md-elevation-4">
-      <li>
-        Multi-season crops are calculated assuming they are planted for all
-        their seasons.
-      </li>
-      <li>
-        Prices for seeds and fertilizers are based on the cheapest option
-        between Pierre's, Joja, and Oasis.
-      </li>
-      <li>
-        If seeds cannot be regularly bought, their price is calculated based on
-        a normal crop in the seed maker.
-      </li>
-      <li>
-        Greenhouse values ignore the initial growth period of crops with
-        regrowth since they last forever.
-      </li>
-      <li>
-        The "Either" processing setting only displays the most valuable option.
-      </li>
-      <li>
-        The existence of higher quality crops and farming skills are ignored
-        since they affect crops almost the same.
-      </li>
-      <li>
-        Time involved in jar/keg processing is ignored.
-      </li>
-    </ul>
+    <div :class="$style.card">
+      <ul :class="$style.notes">
+        <li>
+          Multi-season crops are calculated assuming they are planted for all
+          their seasons.
+        </li>
+        <li>
+          Prices for seeds and fertilizers are based on the cheapest option
+          between Pierre's, Joja, and Oasis.
+        </li>
+        <li>
+          If seeds cannot be regularly bought, their price is calculated based
+          on a normal crop in the seed maker.
+        </li>
+        <li>
+          Greenhouse values ignore the initial growth period of crops with
+          regrowth since they last forever.
+        </li>
+        <li>
+          The "Either" processing setting only displays the most valuable
+          option.
+        </li>
+        <li>
+          Time involved in jar/keg processing is ignored.
+        </li>
+        <li>
+          The existence of higher quality crops and farming skills are ignored
+          since they affect crops almost the same.
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -131,6 +137,22 @@ export default {
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14),
     0 1px 10px 0 rgba(0, 0, 0, 0.12);
   margin-bottom: 1em;
+  background-color: #fff;
+
+  h1 {
+    font-size: 2em;
+    font-weight: 400;
+    padding: 1rem 1rem 0.5rem;
+    margin: 0;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 1.5em;
+    font-weight: 400;
+    display: flex;
+    margin: 4px;
+  }
 }
 
 .controls {
@@ -160,11 +182,8 @@ export default {
   }
 }
 
-.header {
-  font-size: 1.5em;
-  font-weight: 400;
+.cropsHeader {
   display: flex;
-  margin: 1em 8px 4px;
   justify-content: space-between;
 }
 
@@ -174,8 +193,8 @@ export default {
 }
 
 .notes {
-  margin: 1em;
-  padding-left: 1em;
+  margin: 0;
+  padding: 0.5em 0.5em 0.5em 2em;
   line-height: 1.4;
 }
 </style>
