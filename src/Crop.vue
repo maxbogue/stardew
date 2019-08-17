@@ -1,6 +1,7 @@
 <template>
   <div :class="[$style.crop, $style['crop--' + seasonName]]">
     <div
+      v-ripple.400="'rgba(255, 255, 255, 0.25)'"
       role="button"
       :class="$style.bar"
       :style="barStyles"
@@ -14,52 +15,59 @@
       </div>
       <span>{{ roundedGPerDay }}</span>
     </div>
-    <ul v-if="showInfo" :class="$style.infos">
-      <li :class="$style.info">
-        <div>Seed Price</div>
-        <div>{{ crop.seedPrice }}g</div>
-      </li>
-      <li :class="$style.info">
-        <div>Sell Price</div>
-        <div>{{ crop.sellPrice }}g</div>
-      </li>
-      <li :class="$style.info">
-        <div>Growth</div>
-        <div>{{ crop.growth }} days</div>
-      </li>
-      <li v-if="crop.regrowth" :class="$style.info">
-        <div>Regrowth</div>
-        <div>{{ crop.regrowth }} days</div>
-      </li>
-      <li v-if="crop.harvests" :class="$style.info">
-        <div>Harvests</div>
-        <div>
-          {{ crop.harvests
-          }}<template v-if="crop.yield > 1"
-            >x{{ crop.yield }}</template
-          >
-        </div>
-      </li>
-      <li :class="$style.info">
-        <div>Revenue</div>
-        <div>{{ crop.revenue }}g</div>
-      </li>
-      <li :class="$style.info">
-        <div>Costs</div>
-        <div>{{ crop.costs }}g</div>
-      </li>
-      <li v-if="crop.profit" :class="$style.info">
-        <div>Profit</div>
-        <div>{{ crop.profit }}g</div>
-      </li>
-    </ul>
+    <drawer :show="showInfo">
+      <ul :class="$style.infos">
+        <li :class="$style.info">
+          <div>Seed Price</div>
+          <div>{{ crop.seedPrice }}g</div>
+        </li>
+        <li :class="$style.info">
+          <div>Sell Price</div>
+          <div>{{ crop.sellPrice }}g</div>
+        </li>
+        <li :class="$style.info">
+          <div>Growth</div>
+          <div>{{ crop.growth }} days</div>
+        </li>
+        <li v-if="crop.regrowth" :class="$style.info">
+          <div>Regrowth</div>
+          <div>{{ crop.regrowth }} days</div>
+        </li>
+        <li v-if="crop.harvests" :class="$style.info">
+          <div>Harvests</div>
+          <div>
+            {{ crop.harvests
+            }}<template v-if="crop.yield > 1"
+              >x{{ crop.yield }}</template
+            >
+          </div>
+        </li>
+        <li :class="$style.info">
+          <div>Revenue</div>
+          <div>{{ crop.revenue }}g</div>
+        </li>
+        <li :class="$style.info">
+          <div>Costs</div>
+          <div>{{ crop.costs }}g</div>
+        </li>
+        <li v-if="crop.profit" :class="$style.info">
+          <div>Profit</div>
+          <div>{{ crop.profit }}g</div>
+        </li>
+      </ul>
+    </drawer>
   </div>
 </template>
 
 <script>
+import Drawer from './Drawer.vue';
+
 const PAREN_RE = /^(.*) \((.*)\)$/;
 
 export default {
+  components: {
+    Drawer,
+  },
   props: {
     crop: { type: Object, required: true },
     seasonName: { type: String, required: true },
