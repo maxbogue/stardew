@@ -1,3 +1,4 @@
-dist/
+dist/**
 !dist/index.html
+!dist/starfruit.png
 node_modules/
