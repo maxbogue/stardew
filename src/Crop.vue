@@ -25,7 +25,7 @@
           <div>Sell Price</div>
           <div>{{ crop.sellPrice }}g</div>
         </li>
-        <li :class="$style.info">
+        <li v-if="!isGreenhouse || !crop.regrowth" :class="$style.info">
           <div>Growth</div>
           <div>{{ crop.growth }} days</div>
         </li>
@@ -48,7 +48,7 @@
         </li>
         <li :class="$style.info">
           <div>Costs</div>
-          <div>{{ crop.costs }}g</div>
+          <div>{{ Math.round(crop.costs) }}g</div>
         </li>
         <li v-if="crop.profit" :class="$style.info">
           <div>Profit</div>
@@ -77,6 +77,9 @@ export default {
     showInfo: false,
   }),
   computed: {
+    isGreenhouse() {
+      return this.seasonName === 'greenhouse';
+    },
     name() {
       return PAREN_RE.test(this.crop.name)
         ? this.crop.name.match(PAREN_RE)[1]
@@ -122,8 +125,8 @@ export default {
   }
 
   &--fall {
-    --bar-color: hsla(42, 100%, 65%, 0.5);
-    --bar-color-dark: hsla(42, 100%, 65%, 0.7);
+    --bar-color: hsla(36, 100%, 65%, 0.5);
+    --bar-color-dark: hsla(36, 100%, 65%, 0.7);
   }
 }
 

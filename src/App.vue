@@ -6,10 +6,10 @@
         <label>
           <div>Season</div>
           <select v-model="seasonName">
-            <option value="greenhouse">Greenhouse</option>
             <option value="spring">Spring</option>
             <option value="summer">Summer</option>
             <option value="fall">Fall</option>
+            <option value="greenhouse">Greenhouse</option>
           </select>
         </label>
         <label>
@@ -103,7 +103,7 @@ export default {
   },
   data: () => ({
     baseCrops,
-    seasonName: 'greenhouse',
+    seasonName: 'spring',
     fertilizer: 'none',
     processing: 'none',
   }),

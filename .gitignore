@@ -1,4 +1,4 @@
 dist/**
 !dist/index.html
-!dist/starfruit.png
+!dist/stardrop.png
 node_modules/
