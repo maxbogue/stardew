@@ -25,13 +25,17 @@
           <div>Sell Price</div>
           <div>{{ crop.sellPrice }}g</div>
         </li>
-        <li v-if="!isGreenhouse || !crop.regrowth" :class="$style.info">
+        <li v-if="!crop.regrowth" :class="$style.info">
           <div>Growth</div>
           <div>{{ crop.growth }} days</div>
         </li>
-        <li v-if="crop.regrowth" :class="$style.info">
+        <li v-else-if="isGreenhouse" :class="$style.info">
           <div>Regrowth</div>
           <div>{{ crop.regrowth }} days</div>
+        </li>
+        <li v-else :class="$style.info">
+          <div>Growth</div>
+          <div>{{ crop.growth }}|{{ crop.regrowth }} days</div>
         </li>
         <li v-if="crop.harvests" :class="$style.info">
           <div>Harvests</div>
