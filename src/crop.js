@@ -59,13 +59,13 @@ const getHarvests = ({ seasons, growth, regrowth }) => {
   return 1 + Math.floor(daysAfterGrowth / (regrowth || growth));
 };
 
-const getProcessingDuration = ({ category, processing, kegDuration }) => {
+const getProcessingTime = ({ category, processing, kegTime }) => {
   if (processing === 'none') {
     return 0;
   } else if (processing === 'jar') {
     return 3;
-  } else if (kegDuration) {
-    return kegDuration;
+  } else if (kegTime) {
+    return kegTime;
   } else if (category === 'fruit') {
     return 7;
   } else if (category === 'veg') {
@@ -74,79 +74,53 @@ const getProcessingDuration = ({ category, processing, kegDuration }) => {
   return 0;
 };
 
-const getSeasonalDuration = (crop, constraint) => {
-  const growthDuration = crop.seasons * 28;
-  const processingDuration =
-    crop.harvests * crop.yield * getProcessingDuration(crop);
-  if (constraint === 'growth') {
-    return growthDuration;
-  } else if (constraint === 'processing') {
-    return processingDuration;
-  }
-  return growthDuration + processingDuration;
-};
-
-const getGreenhouseDuration = (crop, constraint) => {
-  const growthDuration = crop.regrowth || crop.growth;
-  const processingDuration = crop.yield * getProcessingDuration(crop);
-  if (constraint === 'growth') {
-    return growthDuration;
-  } else if (constraint === 'processing') {
-    return processingDuration;
-  }
-  return growthDuration + processingDuration;
-};
-
-const addSeasonalGPerDay = (crop, fertilizer, constraint) => {
-  crop.harvests = getHarvests(crop);
-  crop.revenue = crop.sellPrice * crop.yield * crop.harvests;
-  const plantings = crop.regrowth ? 1 : crop.harvests;
-  crop.costs = crop.seedPrice * plantings + fertilizer.cost;
-  crop.profit = crop.revenue - crop.costs;
-  crop.duration = getSeasonalDuration(crop, constraint);
-  crop.gPerDay = crop.profit / crop.duration;
-};
-
-const addGreenhouseGPerDay = (crop, fertilizer, constraint) => {
-  crop.revenue = crop.sellPrice * crop.yield;
-  // Amortized cost of infinte regrowth is 0.
-  crop.costs = crop.regrowth
-    ? 0
-    : crop.seedPrice + (fertilizer.cost * crop.growth) / 28;
-  crop.profit = crop.revenue - crop.costs;
-  crop.duration = getGreenhouseDuration(crop, constraint);
-  crop.gPerDay = crop.profit / crop.duration;
-};
-
 export const createCrop = (
   season,
   fertilizerName,
   processing,
-  constraint
+  time
 ) => baseCrop => {
   const fertilizer = FERTILIZERS[fertilizerName];
   const crop = { ...baseCrop };
-  crop.key = crop.name;
-
-  crop.processing = pickProcessing(crop, processing);
-  crop.sellPrice = getProcessingAdjustedSellPrice(crop);
 
   if (!crop.seedPrice) {
     crop.seedPrice = Math.floor(crop.sellPrice / SEED_MAKER_AVERAGE_YIELD);
   }
 
-  if (season && crop.seasons > 1) {
-    crop.name += ` (${crop.seasons} seasons)`;
-  }
-
-  crop.name = crop.name.replace(') (', ', ');
+  crop.processing = pickProcessing(crop, processing);
+  crop.sellPrice = getProcessingAdjustedSellPrice(crop);
   crop.growth = Math.floor(crop.growth * fertilizer.speed);
 
   if (season) {
-    addSeasonalGPerDay(crop, fertilizer, constraint);
+    // Seasonal
+    crop.harvests = getHarvests(crop);
+    crop.revenue = crop.sellPrice * crop.yield * crop.harvests;
+    const plantings = crop.regrowth ? 1 : crop.harvests;
+    const fertilizers = crop.regrowth ? 1 : crop.seasons;
+    crop.costs = crop.seedPrice * plantings + fertilizer.cost * fertilizers;
+    crop.growthTime = crop.seasons * 28;
+    crop.processingTime = crop.harvests * crop.yield * getProcessingTime(crop);
   } else {
-    addGreenhouseGPerDay(crop, fertilizer, constraint);
+    // Greenhouse
+    crop.revenue = crop.sellPrice * crop.yield;
+    // Amortized cost of infinte regrowth is 0.
+    crop.costs = crop.regrowth
+      ? 0
+      : crop.seedPrice + (fertilizer.cost * crop.growth) / 28;
+    crop.growthTime = crop.regrowth || crop.growth;
+    crop.processingTime = crop.yield * getProcessingTime(crop);
   }
+
+  if (time === 'growth') {
+    crop.time = crop.growthTime;
+  } else if (time === 'processing') {
+    crop.time = crop.processingTime;
+  } else {
+    crop.time = crop.growthTime + crop.processingTime;
+  }
+
+  crop.profit = crop.revenue - crop.costs;
+  crop.gPerDay = crop.profit / crop.time;
 
   return crop;
 };

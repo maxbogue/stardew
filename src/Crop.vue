@@ -41,16 +41,16 @@
           </div>
         </li>
         <li :class="$style.info">
-          <div>Revenue</div>
-          <div>{{ crop.revenue }}g</div>
-        </li>
-        <li :class="$style.info">
-          <div>Costs</div>
-          <div>{{ Math.round(crop.costs) }}g</div>
-        </li>
-        <li v-if="crop.profit" :class="$style.info">
           <div>Profit</div>
-          <div>{{ crop.profit }}g</div>
+          <div>{{ Math.round(crop.profit) }}g</div>
+        </li>
+        <li v-if="time !== 'processing'" :class="$style.info">
+          <div>Growth Time</div>
+          <div>{{ crop.growthTime }} days</div>
+        </li>
+        <li v-if="time !== 'growth'" :class="$style.info">
+          <div>Processing Time</div>
+          <div>{{ Math.round(crop.processingTime * 10) / 10 }} days</div>
         </li>
       </ul>
     </Drawer>
@@ -68,6 +68,7 @@ export default {
     crop: { type: Object, required: true },
     seasonName: { type: String, required: true },
     processing: { type: String, required: true },
+    time: { type: String, required: true },
     maxGPerDay: { type: Number, required: true },
   },
   data: () => ({

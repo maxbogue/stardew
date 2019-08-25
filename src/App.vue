@@ -29,14 +29,24 @@
             <option value="keg">Keg</option>
           </select>
         </label>
-        <label v-if="processing !== 'none'">
-          <div>Limited By</div>
-          <select v-model="constraint">
-            <option value="combined">Growth + Processing</option>
-            <option value="growth">Growth</option>
-            <option value="processing">Processing</option>
-          </select>
-        </label>
+        <transition
+          name="flex"
+          :enter-class="$style.flexEnter"
+          :enter-active-class="$style.flexActive"
+          :enter-to-class="$style.flexLeave"
+          :leave-class="$style.flexLeave"
+          :leave-active-class="$style.flexActive"
+          :leave-to-class="$style.flexEnter"
+        >
+          <label v-if="processing !== 'none'">
+            <div>Time</div>
+            <select v-model="time">
+              <option value="combined">Growth + Processing</option>
+              <option value="growth">Growth</option>
+              <option value="processing">Processing</option>
+            </select>
+          </label>
+        </transition>
       </div>
     </div>
     <div :class="[$style.card, $style.crops]">
@@ -49,8 +59,9 @@
         :crop="crop"
         :season-name="seasonName"
         :processing="processing"
+        :time="time"
         :max-g-per-day="sortedCrops[0].gPerDay"
-        :key="crop.key"
+        :key="crop.name"
       />
     </div>
     <div :class="$style.card">
@@ -115,7 +126,7 @@ export default {
     seasonName: 'spring',
     fertilizer: 'none',
     processing: 'none',
-    constraint: 'growth',
+    time: 'growth',
   }),
   computed: {
     season() {
@@ -123,12 +134,7 @@ export default {
     },
     crops() {
       return this.baseCrops.map(
-        createCrop(
-          this.season,
-          this.fertilizer,
-          this.processing,
-          this.constraint
-        )
+        createCrop(this.season, this.fertilizer, this.processing, this.time)
       );
     },
     filteredCrops() {
@@ -143,9 +149,9 @@ export default {
   watch: {
     processing() {
       if (this.processing === 'none') {
-        this.constraint = 'growth';
+        this.time = 'growth';
       } else {
-        this.constraint = 'combined';
+        this.time = 'combined';
       }
     },
   },
@@ -187,13 +193,13 @@ export default {
   justify-content: space-between;
   padding: 0.5em;
 
+  @media (max-width: 450px) {
+    flex-direction: column;
+  }
+
   > * {
     flex: 1;
     padding: 0.5em;
-
-    @media (max-width: 450px) {
-      min-width: 100%;
-    }
   }
 
   label > div {
@@ -222,5 +228,20 @@ export default {
   margin: 0;
   padding: 0.5em 0.5em 0.5em 2em;
   line-height: 1.4;
+}
+
+.flexActive {
+  overflow: hidden;
+  white-space: nowrap;
+  transition: all 0.4s;
+}
+
+.flexEnter {
+  flex: 0.01;
+  flex: 0.00001;
+}
+
+.flexLeave {
+  flex: 1;
 }
 </style>
