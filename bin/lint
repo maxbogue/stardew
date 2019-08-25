@@ -1,0 +1,22 @@
+#!/bin/sh
+
+if [ "$1" = "staged" ]; then
+  GIT_CMD="git diff --cached --name-only --diff-filter=ACM"
+elif [ "$1" = "all" ]; then
+  GIT_CMD="git ls-files"
+else
+  GIT_CMD="git diff HEAD --name-only --diff-filter=ACM"
+fi
+
+STATUS=0
+
+JS_FILES=$($GIT_CMD | egrep "\.(js|vue)$")
+if [ "$JS_FILES" != "" ]; then
+  eslint $JS_FILES --fix || STATUS=1
+fi
+
+if [ "$1" = "staged" ]; then
+  git add $JS_FILES $TS_FILES
+fi
+
+exit $STATUS

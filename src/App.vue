@@ -44,7 +44,7 @@
         <span>Crop</span>
         <span>g/day</span>
       </h2>
-      <crop
+      <Crop
         v-for="crop in sortedCrops"
         :crop="crop"
         :season-name="seasonName"

@@ -57,7 +57,7 @@
         }],
 
         "vue/attributes-order": ["off"],
-        "vue/component-name-in-template-casing": ["error", "kebab-case"],
+        "vue/component-name-in-template-casing": ["error", "PascalCase"],
         "vue/html-closing-bracket-spacing": ["off"],
         "vue/html-closing-bracket-newline": ["off"],
         "vue/html-indent": ["off"],

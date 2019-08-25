@@ -13,7 +13,7 @@
       </div>
       <span>{{ crop.gPerDay.toFixed(2) }}</span>
     </div>
-    <drawer :show="showInfo">
+    <Drawer :show="showInfo">
       <ul :class="$style.infos">
         <li :class="$style.info">
           <div>Seed Price</div>
@@ -53,7 +53,7 @@
           <div>{{ crop.profit }}g</div>
         </li>
       </ul>
-    </drawer>
+    </Drawer>
   </div>
 </template>
 

@@ -6,22 +6,13 @@
   "private": true,
   "scripts": {
     "dev": "webpack --mode development --watch --progress",
-    "build": "NODE_ENV=production webpack --mode production --progress --hide-modules"
+    "build": "NODE_ENV=production webpack --mode production --progress --hide-modules",
+    "lint": "./bin/lint"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "./bin/lint"
     }
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ],
-    "*.vue": [
-      "eslint --fix",
-      "git add"
-    ]
   },
   "dependencies": {
     "lodash": "^4.17.15",
@@ -44,7 +35,6 @@
     "eslint-plugin-vue": "^5.2.3",
     "file-loader": "^4.2.0",
     "husky": "^3.0.3",
-    "lint-staged": "^9.2.1",
     "prettier": "^1.18.2",
     "sass": "^1.22.9",
     "sass-loader": "^7.2.0",
