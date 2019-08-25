@@ -8,12 +8,10 @@
       @click="showInfo = !showInfo"
     >
       <div>
-        <span :class="$style.name">{{ name }}</span>
-        <span v-if="parenthetical" :class="$style.parenthetical">{{
-          parenthetical
-        }}</span>
+        <span :class="$style.name">{{ crop.name }}</span>
+        <span v-if="notes" :class="$style.notes">{{ notes }}</span>
       </div>
-      <span>{{ roundedGPerDay }}</span>
+      <span>{{ crop.gPerDay.toFixed(2) }}</span>
     </div>
     <drawer :show="showInfo">
       <ul :class="$style.infos">
@@ -25,17 +23,13 @@
           <div>Sell Price</div>
           <div>{{ crop.sellPrice }}g</div>
         </li>
-        <li v-if="!crop.regrowth" :class="$style.info">
+        <li v-if="!isGreenhouse || !crop.regrowth" :class="$style.info">
           <div>Growth</div>
           <div>{{ crop.growth }} days</div>
         </li>
-        <li v-else-if="isGreenhouse" :class="$style.info">
+        <li v-if="crop.regrowth" :class="$style.info">
           <div>Regrowth</div>
           <div>{{ crop.regrowth }} days</div>
-        </li>
-        <li v-else :class="$style.info">
-          <div>Growth</div>
-          <div>{{ crop.growth }}|{{ crop.regrowth }} days</div>
         </li>
         <li v-if="crop.harvests" :class="$style.info">
           <div>Harvests</div>
@@ -66,8 +60,6 @@
 <script>
 import Drawer from './Drawer.vue';
 
-const PAREN_RE = /^(.*) \((.*)\)$/;
-
 export default {
   components: {
     Drawer,
@@ -75,6 +67,7 @@ export default {
   props: {
     crop: { type: Object, required: true },
     seasonName: { type: String, required: true },
+    processing: { type: String, required: true },
     maxGPerDay: { type: Number, required: true },
   },
   data: () => ({
@@ -84,18 +77,15 @@ export default {
     isGreenhouse() {
       return this.seasonName === 'greenhouse';
     },
-    name() {
-      return PAREN_RE.test(this.crop.name)
-        ? this.crop.name.match(PAREN_RE)[1]
-        : this.crop.name;
-    },
-    parenthetical() {
-      return PAREN_RE.test(this.crop.name)
-        ? this.crop.name.match(PAREN_RE)[2]
-        : '';
-    },
-    roundedGPerDay() {
-      return this.crop.gPerDay.toFixed(2);
+    notes() {
+      const notes = [];
+      if (this.processing === 'either') {
+        notes.push(this.crop.processing);
+      }
+      if (!this.isGreenhouse && this.crop.seasons > 1) {
+        notes.push(`${this.crop.seasons} seasons`);
+      }
+      return notes.join(', ');
     },
     barPercentage() {
       return (100 * this.crop.gPerDay) / this.maxGPerDay;
@@ -166,7 +156,7 @@ export default {
   white-space: nowrap;
 }
 
-.parenthetical {
+.notes {
   font-size: 0.6em;
   text-transform: uppercase;
 }

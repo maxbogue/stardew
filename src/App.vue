@@ -24,9 +24,17 @@
           <div>Processing</div>
           <select v-model="processing">
             <option value="none">None</option>
+            <option value="either">Either</option>
             <option value="jar">Jar</option>
             <option value="keg">Keg</option>
-            <option value="either">Either</option>
+          </select>
+        </label>
+        <label v-if="processing !== 'none'">
+          <div>Limited By</div>
+          <select v-model="constraint">
+            <option value="combined">Growth + Processing</option>
+            <option value="growth">Growth</option>
+            <option value="processing">Processing</option>
           </select>
         </label>
       </div>
@@ -40,6 +48,7 @@
         v-for="crop in sortedCrops"
         :crop="crop"
         :season-name="seasonName"
+        :processing="processing"
         :max-g-per-day="sortedCrops[0].gPerDay"
         :key="crop.key"
       />
@@ -106,6 +115,7 @@ export default {
     seasonName: 'spring',
     fertilizer: 'none',
     processing: 'none',
+    constraint: 'growth',
   }),
   computed: {
     season() {
@@ -113,14 +123,30 @@ export default {
     },
     crops() {
       return this.baseCrops.map(
-        createCrop(this.season, this.fertilizer, this.processing)
+        createCrop(
+          this.season,
+          this.fertilizer,
+          this.processing,
+          this.constraint
+        )
       );
     },
     filteredCrops() {
-      return this.crops.filter(growsInSeason(this.season));
+      return this.crops
+        .filter(growsInSeason(this.season))
+        .filter(crop => crop.gPerDay < Infinity);
     },
     sortedCrops() {
       return sortBy('gPerDay', this.filteredCrops).reverse();
+    },
+  },
+  watch: {
+    processing() {
+      if (this.processing === 'none') {
+        this.constraint = 'growth';
+      } else {
+        this.constraint = 'combined';
+      }
     },
   },
   methods: {},
