@@ -140,7 +140,7 @@ export default {
     filteredCrops() {
       return this.crops
         .filter(growsInSeason(this.season))
-        .filter(crop => crop.gPerDay < Infinity);
+        .filter(crop => crop.gPerDay > 0);
     },
     sortedCrops() {
       return sortBy('gPerDay', this.filteredCrops).reverse();

@@ -1,3 +1,5 @@
+import curry from 'lodash/fp/curry';
+
 const SEED_MAKER_AVERAGE_YIELD = 2 * 0.975;
 
 const FERTILIZERS = {
@@ -16,7 +18,7 @@ const FERTILIZERS = {
 };
 
 const getJarSellPrice = ({ category, sellPrice }) =>
-  category === 'other' ? sellPrice : sellPrice * 2 + 50;
+  category === 'other' ? 0 : sellPrice * 2 + 50;
 
 const getKegSellPrice = ({ category, sellPrice, kegSellPrice }) => {
   if (kegSellPrice) {
@@ -26,17 +28,22 @@ const getKegSellPrice = ({ category, sellPrice, kegSellPrice }) => {
   } else if (category === 'veg') {
     return sellPrice * 2.25;
   }
-  return sellPrice;
+  return 0;
 };
 
-const pickProcessing = (crop, processing) => {
+const pickProcessing = (crop, season, fertilizerName, processing, time) => {
   if (processing !== 'either') {
     return processing;
   }
-  const jarSellPrice = getJarSellPrice(crop);
-  const kegSellPrice = getKegSellPrice(crop);
-  if (jarSellPrice > crop.sellPrice || kegSellPrice > crop.sellPrice) {
-    if (jarSellPrice >= kegSellPrice) {
+
+  const jarCrop = createCrop(season, fertilizerName, 'jar', time, crop);
+  const kegCrop = createCrop(season, fertilizerName, 'keg', time, crop);
+  const noneCrop = createCrop(season, fertilizerName, 'none', time, crop);
+  if (
+    jarCrop.gPerDay > noneCrop.gPerDay ||
+    kegCrop.gPerDay > noneCrop.gPerDay
+  ) {
+    if (jarCrop.gPerDay >= kegCrop.gPerDay) {
       return 'jar';
     }
     return 'keg';
@@ -74,12 +81,7 @@ const getProcessingTime = ({ category, processing, kegTime }) => {
   return 0;
 };
 
-export const createCrop = (
-  season,
-  fertilizerName,
-  processing,
-  time
-) => baseCrop => {
+const _createCrop = (season, fertilizerName, processing, time, baseCrop) => {
   const fertilizer = FERTILIZERS[fertilizerName];
   const crop = { ...baseCrop };
 
@@ -87,7 +89,13 @@ export const createCrop = (
     crop.seedPrice = Math.floor(crop.sellPrice / SEED_MAKER_AVERAGE_YIELD);
   }
 
-  crop.processing = pickProcessing(crop, processing);
+  crop.processing = pickProcessing(
+    crop,
+    season,
+    fertilizerName,
+    processing,
+    time
+  );
   crop.sellPrice = getProcessingAdjustedSellPrice(crop);
   crop.growth = Math.floor(crop.growth * fertilizer.speed);
 
@@ -120,10 +128,12 @@ export const createCrop = (
   }
 
   crop.profit = crop.revenue - crop.costs;
-  crop.gPerDay = crop.profit / crop.time;
+  crop.gPerDay = crop.time ? crop.profit / crop.time : 0;
 
   return crop;
 };
+
+export const createCrop = curry(_createCrop);
 
 export const growsInSeason = season => crop => {
   if (!season) {
