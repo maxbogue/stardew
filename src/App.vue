@@ -87,11 +87,12 @@
           option.
         </li>
         <li>
-          Time involved in jar/keg processing is ignored.
-        </li>
-        <li>
           The existence of higher quality crops and farming skills are ignored
           since they affect crops almost the same.
+        </li>
+        <li>
+          Keg processing time for Coffee Beans is set for 2 Coffee per day to be
+          more realistic than the theoretical ~10.
         </li>
       </ul>
     </div>
