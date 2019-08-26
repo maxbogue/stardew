@@ -11,46 +11,46 @@
         <span :class="$style.name">{{ crop.name }}</span>
         <span v-if="notes" :class="$style.notes">{{ notes }}</span>
       </div>
-      <span>{{ crop.gPerDay.toFixed(2) }}</span>
+      <span>{{ crop.gPerDay | twoDecimals }}</span>
     </div>
     <Drawer :show="showInfo">
       <ul :class="$style.infos">
         <li :class="$style.info">
           <div>Seed Price</div>
-          <div>{{ crop.seedPrice }}g</div>
+          <div>{{ crop.seedPrice | wholeNumber }}g</div>
         </li>
         <li :class="$style.info">
           <div>Sell Price</div>
-          <div>{{ crop.sellPrice }}g</div>
+          <div>{{ crop.sellPrice | wholeNumber }}g</div>
         </li>
         <li v-if="!isGreenhouse || !crop.regrowth" :class="$style.info">
           <div>Growth</div>
-          <div>{{ crop.growth }} days</div>
+          <div>{{ crop.growth | wholeNumber }} days</div>
         </li>
         <li v-if="crop.regrowth" :class="$style.info">
           <div>Regrowth</div>
-          <div>{{ crop.regrowth }} days</div>
+          <div>{{ crop.regrowth | wholeNumber }} days</div>
         </li>
         <li v-if="crop.harvests" :class="$style.info">
           <div>Harvests</div>
           <div>
             {{ crop.harvests
             }}<template v-if="crop.yield > 1"
-              >x{{ crop.yield }}</template
+              >x{{ crop.yield | wholeNumber }}</template
             >
           </div>
         </li>
         <li :class="$style.info">
           <div>Profit</div>
-          <div>{{ Math.round(crop.profit) }}g</div>
+          <div>{{ crop.profit | wholeNumber }}g</div>
         </li>
         <li v-if="time !== 'processing'" :class="$style.info">
           <div>Growth Time</div>
-          <div>{{ crop.growthTime }} days</div>
+          <div>{{ crop.growthTime | wholeNumber }} days</div>
         </li>
         <li v-if="time !== 'growth'" :class="$style.info">
           <div>Processing Time</div>
-          <div>{{ Math.round(crop.processingTime * 10) / 10 }} days</div>
+          <div>{{ crop.processingTime | maxOneDecimal }} days</div>
         </li>
       </ul>
     </Drawer>
@@ -63,6 +63,22 @@ import Drawer from './Drawer.vue';
 export default {
   components: {
     Drawer,
+  },
+  filters: {
+    wholeNumber(n) {
+      return Math.round(n).toLocaleString();
+    },
+    twoDecimals(n) {
+      return n.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    },
+    maxOneDecimal(n) {
+      return n.toLocaleString(undefined, {
+        maximumFractionDigits: 1,
+      });
+    },
   },
   props: {
     crop: { type: Object, required: true },
