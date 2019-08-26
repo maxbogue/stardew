@@ -96,7 +96,7 @@ export default {
     },
     notes() {
       const notes = [];
-      if (this.processing === 'either') {
+      if (this.processing === 'best') {
         notes.push(this.crop.processing);
       }
       if (!this.isGreenhouse && this.crop.seasons > 1) {

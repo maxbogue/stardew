@@ -32,7 +32,7 @@ const getKegSellPrice = ({ category, sellPrice, kegSellPrice }) => {
 };
 
 const pickProcessing = (crop, season, fertilizerName, processing, time) => {
-  if (processing !== 'either') {
+  if (processing !== 'best') {
     return processing;
   }
 

@@ -24,7 +24,7 @@
           <div>Processing</div>
           <select v-model="processing">
             <option value="none">None</option>
-            <option value="either">Either</option>
+            <option value="best">Best</option>
             <option value="jar">Jar</option>
             <option value="keg">Keg</option>
           </select>
@@ -81,10 +81,6 @@
         <li>
           Greenhouse values ignore the initial growth period of crops with
           regrowth since they last forever.
-        </li>
-        <li>
-          The "Either" processing setting only displays the most valuable
-          option.
         </li>
         <li>
           The existence of higher quality crops and farming skills are ignored
