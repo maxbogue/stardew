@@ -31,10 +31,10 @@
           <div>Fertilizer</div>
           <select v-model="fertilizer">
             <option value="none">None</option>
-            <option value="speedGro">Speed-Gro</option>
-            <option value="deluxeSpeedGro">Deluxe Speed-Gro</option>
-            <option value="basicFertilizer">Basic Fertilizer</option>
-            <option value="qualityFertilizer">Quality Fertilizer</option>
+            <option value="speed">Speed-Gro</option>
+            <option value="deluxe">Deluxe Speed-Gro</option>
+            <option value="basic">Basic Fertilizer</option>
+            <option value="quality">Quality Fertilizer</option>
           </select>
         </label>
         <label>
@@ -75,10 +75,10 @@
         >
           <label v-if="processing !== 'none'">
             <div>Skip Processing</div>
-            <select v-model="processQualities">
-              <option value="gold">None</option>
-              <option value="silver">Gold</option>
-              <option value="normal">Gold + Silver</option>
+            <select v-model="skipProcessing">
+              <option value="none">None</option>
+              <option value="gold">Gold</option>
+              <option value="starred">Gold + Silver</option>
             </select>
           </label>
         </transition>
@@ -153,7 +153,9 @@
 
 <script>
 /* globals VERSION */
-import { sortBy } from 'lodash/fp';
+import identity from 'lodash/fp/identity';
+import mapValues1 from 'lodash/fp/mapValues';
+import sortBy from 'lodash/fp/sortBy';
 
 import { createCrop, growsInSeason } from './crop';
 import Crop from './Crop.vue';
@@ -165,27 +167,48 @@ const FERTILIZERS = {
     speed: 1,
     quality: 0,
   },
-  speedGro: {
+  speed: {
     cost: 100,
     speed: 0.9,
     quality: 0,
   },
-  deluxeSpeedGro: {
+  deluxe: {
     cost: 80,
     speed: 0.75,
     quality: 0,
   },
-  basicFertilizer: {
+  basic: {
     cost: 100,
     speed: 1,
     quality: 1,
   },
-  qualityFertilizer: {
+  quality: {
     cost: 150,
     speed: 1,
     quality: 2,
   },
 };
+
+export const mapValues = mapValues1.convert({ cap: false });
+
+export const mapQueryParams = mapValues(
+  ({ param, defaultVal = '', parse = identity, alsoSet = {} } = {}, key) => ({
+    get() {
+      const value = this.$route.query[param || key];
+      return value !== undefined ? parse(value) : defaultVal;
+    },
+    set(newValue) {
+      this.$router.replace({
+        path: this.$route.path,
+        query: {
+          ...this.$route.query,
+          ...alsoSet,
+          [param || key]: newValue === defaultVal ? undefined : newValue,
+        },
+      });
+    },
+  })
+);
 
 const seasonFromName = seasonName =>
   ['greenhouse', 'spring', 'summer', 'fall'].indexOf(seasonName);
@@ -206,14 +229,30 @@ export default {
   data: () => ({
     VERSION: VERSION,
     baseCrops,
-    seasonName: 'spring',
-    fertilizer: 'none',
-    processing: 'none',
-    time: 'growth',
-    level: '10',
-    processQualities: 'gold',
   }),
   computed: {
+    ...mapQueryParams({
+      seasonName: {
+        param: 'season',
+        defaultVal: 'spring',
+      },
+      fertilizer: {
+        defaultVal: 'none',
+      },
+      processing: {
+        defaultVal: 'none',
+      },
+      time: {
+        defaultVal: 'combined',
+      },
+      level: {
+        defaultVal: '10',
+      },
+      skipProcessing: {
+        param: 'skip',
+        defaultVal: 'none',
+      },
+    }),
     season() {
       return seasonFromName(this.seasonName);
     },
@@ -222,9 +261,9 @@ export default {
         season: this.season,
         fertilizer: FERTILIZERS[this.fertilizer],
         processing: this.processing,
-        time: this.time,
+        time: this.processing === 'none' ? 'growth' : this.time,
         level: parseInt(this.level),
-        processQualities: this.processQualities,
+        skipProcessing: this.skipProcessing,
       };
     },
     crops() {
@@ -237,15 +276,6 @@ export default {
     },
     sortedCrops() {
       return sortBy('gPerDay', this.filteredCrops).reverse();
-    },
-  },
-  watch: {
-    processing() {
-      if (this.processing === 'none') {
-        this.time = 'growth';
-      } else {
-        this.time = 'combined';
-      }
     },
   },
   methods: {},

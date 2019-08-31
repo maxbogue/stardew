@@ -95,13 +95,13 @@ const getRevenue = (options, crop) => {
   if (crop.processing === 'none') {
     crop.artisanYield = 0;
     return normalValue + silverValue + goldValue;
-  } else if (options.processQualities === 'normal') {
+  } else if (options.skipProcessing === 'starred') {
     crop.artisanYield = normalYield;
     return silverValue + goldValue + crop.artisanYield * crop.artisanSellPrice;
-  } else if (options.processQualities === 'silver') {
+  } else if (options.skipProcessing === 'gold') {
     crop.artisanYield = normalYield + silverYield;
     return goldValue + crop.artisanYield * crop.artisanSellPrice;
-  } else if (options.processQualities === 'gold') {
+  } else if (options.skipProcessing === 'none') {
     crop.artisanYield = normalYield + silverYield + goldYield;
     return crop.artisanYield * crop.artisanSellPrice;
   }
