@@ -2,21 +2,6 @@ import curry from 'lodash/fp/curry';
 
 const SEED_MAKER_AVERAGE_YIELD = 2 * 0.975;
 
-const FERTILIZERS = {
-  none: {
-    cost: 0,
-    speed: 1,
-  },
-  speedGro: {
-    cost: 100,
-    speed: 0.9,
-  },
-  deluxeSpeedGro: {
-    cost: 80,
-    speed: 0.75,
-  },
-};
-
 const getJarSellPrice = ({ category, sellPrice }) =>
   category === 'other' ? 0 : sellPrice * 2 + 50;
 
@@ -31,14 +16,14 @@ const getKegSellPrice = ({ category, sellPrice, kegSellPrice }) => {
   return 0;
 };
 
-const pickProcessing = (crop, season, fertilizerName, processing, time) => {
-  if (processing !== 'best') {
-    return processing;
+const pickProcessing = (options, crop) => {
+  if (options.processing !== 'best') {
+    return options.processing;
   }
 
-  const jarCrop = createCrop(season, fertilizerName, 'jar', time, crop);
-  const kegCrop = createCrop(season, fertilizerName, 'keg', time, crop);
-  const noneCrop = createCrop(season, fertilizerName, 'none', time, crop);
+  const jarCrop = createCrop({ ...options, processing: 'jar' }, crop);
+  const kegCrop = createCrop({ ...options, processing: 'keg' }, crop);
+  const noneCrop = createCrop({ ...options, processing: 'none' }, crop);
   if (
     jarCrop.gPerDay > noneCrop.gPerDay ||
     kegCrop.gPerDay > noneCrop.gPerDay
@@ -51,16 +36,19 @@ const pickProcessing = (crop, season, fertilizerName, processing, time) => {
   return 'none';
 };
 
-const getProcessingAdjustedSellPrice = crop => {
+const getArtisanSellPrice = crop => {
   if (crop.processing === 'jar') {
     return getJarSellPrice(crop);
   } else if (crop.processing === 'keg') {
     return getKegSellPrice(crop);
   }
-  return crop.sellPrice;
+  throw new Error(`Invalid processing: ${crop.processing}`);
 };
 
-const getHarvests = ({ seasons, growth, regrowth }) => {
+const getHarvests = ({ season }, { seasons, growth, regrowth }) => {
+  if (!season) {
+    return 1; // Greenhouse
+  }
   const daysForGrowth = seasons * 28 - 1;
   const daysAfterGrowth = daysForGrowth - growth;
   return 1 + Math.floor(daysAfterGrowth / (regrowth || growth));
@@ -81,47 +69,83 @@ const getProcessingTime = ({ category, processing, kegTime }) => {
   return 0;
 };
 
-const _createCrop = (season, fertilizerName, processing, time, baseCrop) => {
-  const fertilizer = FERTILIZERS[fertilizerName];
+// Formula taken from https://stardewvalleywiki.com/Farming:
+// P(gold) = 0.01 + 0.2 * (lvl/10 + q * (lvl+2)/12)
+// P(silver) = MIN(2*P(gold),0.75) * (1-P(gold))
+// P(normal) = 1 - P(silver) - P(gold)
+const getCropQualityProbabilities = ({ level, fertilizer }) => {
+  const pGold =
+    0.01 + 0.2 * (level / 10 + (fertilizer.quality * (level + 2)) / 12);
+  const pSilver = Math.min(2 * pGold, 0.75) * (1 - pGold);
+  const pNormal = 1 - pSilver - pGold;
+  return [pNormal, pSilver, pGold];
+};
+
+const getRevenue = (options, crop) => {
+  const [pNormal, pSilver, pGold] = getCropQualityProbabilities(options);
+  const normalYield =
+    crop.harvests * pNormal + crop.harvests * (crop.yield - 1);
+  const silverYield = crop.harvests * pSilver;
+  const goldYield = crop.harvests * pGold;
+
+  const normalValue = normalYield * crop.sellPrice;
+  const silverValue = silverYield * crop.sellPrice * 1.25;
+  const goldValue = goldYield * crop.sellPrice * 1.5;
+
+  if (crop.processing === 'none') {
+    crop.artisanYield = 0;
+    return normalValue + silverValue + goldValue;
+  } else if (options.processQualities === 'normal') {
+    crop.artisanYield = normalYield;
+    return silverValue + goldValue + crop.artisanYield * crop.artisanSellPrice;
+  } else if (options.processQualities === 'silver') {
+    crop.artisanYield = normalYield + silverYield;
+    return goldValue + crop.artisanYield * crop.artisanSellPrice;
+  } else if (options.processQualities === 'gold') {
+    crop.artisanYield = normalYield + silverYield + goldYield;
+    return crop.artisanYield * crop.artisanSellPrice;
+  }
+  throw new Error('Unreachable.');
+};
+
+const _createCrop = (options, baseCrop) => {
   const crop = { ...baseCrop };
 
   if (!crop.seedPrice) {
     crop.seedPrice = Math.floor(crop.sellPrice / SEED_MAKER_AVERAGE_YIELD);
   }
 
-  crop.processing = pickProcessing(
-    crop,
-    season,
-    fertilizerName,
-    processing,
-    time
-  );
-  crop.sellPrice = getProcessingAdjustedSellPrice(crop);
-  crop.growth = Math.floor(crop.growth * fertilizer.speed);
+  crop.processing = pickProcessing(options, crop);
+  if (crop.processing !== 'none') {
+    const artisanMultiplier = options.level >= 10 ? 1.4 : 1;
+    crop.artisanSellPrice = getArtisanSellPrice(crop) * artisanMultiplier;
+  }
+  crop.sellPrice *= options.level >= 5 ? 1.1 : 1;
+  crop.growth = Math.floor(crop.growth * options.fertilizer.speed);
 
-  if (season) {
+  crop.harvests = getHarvests(options, crop);
+  crop.revenue = getRevenue(options, crop);
+  crop.processingTime = crop.artisanYield * getProcessingTime(crop);
+
+  if (options.season) {
     // Seasonal
-    crop.harvests = getHarvests(crop);
-    crop.revenue = crop.sellPrice * crop.yield * crop.harvests;
     const plantings = crop.regrowth ? 1 : crop.harvests;
     const fertilizers = crop.regrowth ? 1 : crop.seasons;
-    crop.costs = crop.seedPrice * plantings + fertilizer.cost * fertilizers;
+    crop.costs =
+      crop.seedPrice * plantings + options.fertilizer.cost * fertilizers;
     crop.growthTime = crop.seasons * 28;
-    crop.processingTime = crop.harvests * crop.yield * getProcessingTime(crop);
   } else {
     // Greenhouse
-    crop.revenue = crop.sellPrice * crop.yield;
     // Amortized cost of infinte regrowth is 0.
     crop.costs = crop.regrowth
       ? 0
-      : crop.seedPrice + (fertilizer.cost * crop.growth) / 28;
+      : crop.seedPrice + (options.fertilizer.cost * crop.growth) / 28;
     crop.growthTime = crop.regrowth || crop.growth;
-    crop.processingTime = crop.yield * getProcessingTime(crop);
   }
 
-  if (time === 'growth') {
+  if (options.time === 'growth') {
     crop.time = crop.growthTime;
-  } else if (time === 'processing') {
+  } else if (options.time === 'processing') {
     crop.time = crop.processingTime;
   } else {
     crop.time = crop.growthTime + crop.processingTime;

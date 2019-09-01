@@ -13,6 +13,21 @@
           </select>
         </label>
         <label>
+          <div>Farming Level</div>
+          <select v-model="level">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5 (Tiller)</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10 (Artisan)</option>
+          </select>
+        </label>
+        <label>
           <div>Speed-Gro</div>
           <select v-model="fertilizer">
             <option value="none">None</option>
@@ -44,6 +59,24 @@
               <option value="combined">Growth + Processing</option>
               <option value="growth">Growth</option>
               <option value="processing">Processing</option>
+            </select>
+          </label>
+        </transition>
+        <transition
+          name="flex"
+          :enter-class="$style.flexEnter"
+          :enter-active-class="$style.flexActive"
+          :enter-to-class="$style.flexLeave"
+          :leave-class="$style.flexLeave"
+          :leave-active-class="$style.flexActive"
+          :leave-to-class="$style.flexEnter"
+        >
+          <label v-if="processing !== 'none'">
+            <div>Skip Processing</div>
+            <select v-model="processQualities">
+              <option value="gold">None</option>
+              <option value="silver">Gold</option>
+              <option value="normal">Gold + Silver</option>
             </select>
           </label>
         </transition>
@@ -83,10 +116,6 @@
           regrowth since they last forever.
         </li>
         <li>
-          The existence of higher quality crops and farming skills are ignored
-          since they affect crops almost the same.
-        </li>
-        <li>
           Keg processing time for Coffee Beans is set for 2 Coffee per day to be
           more realistic than the theoretical ~10.
         </li>
@@ -101,6 +130,24 @@ import { sortBy } from 'lodash/fp';
 import Crop from './Crop.vue';
 import baseCrops from './crops.json';
 import { createCrop, growsInSeason } from './crop';
+
+const FERTILIZERS = {
+  none: {
+    cost: 0,
+    speed: 1,
+    quality: 0,
+  },
+  speedGro: {
+    cost: 100,
+    speed: 0.9,
+    quality: 0,
+  },
+  deluxeSpeedGro: {
+    cost: 80,
+    speed: 0.75,
+    quality: 0,
+  },
+};
 
 const seasonFromName = seasonName =>
   ['greenhouse', 'spring', 'summer', 'fall'].indexOf(seasonName);
@@ -124,15 +171,25 @@ export default {
     fertilizer: 'none',
     processing: 'none',
     time: 'growth',
+    level: '10',
+    processQualities: 'gold',
   }),
   computed: {
     season() {
       return seasonFromName(this.seasonName);
     },
+    options() {
+      return {
+        season: this.season,
+        fertilizer: FERTILIZERS[this.fertilizer],
+        processing: this.processing,
+        time: this.time,
+        level: parseInt(this.level),
+        processQualities: this.processQualities,
+      };
+    },
     crops() {
-      return this.baseCrops.map(
-        createCrop(this.season, this.fertilizer, this.processing, this.time)
-      );
+      return this.baseCrops.map(createCrop(this.options));
     },
     filteredCrops() {
       return this.crops
@@ -190,13 +247,11 @@ export default {
   justify-content: space-between;
   padding: 0.5em;
 
-  @media (max-width: 450px) {
-    flex-direction: column;
-  }
-
   > * {
     flex: 1;
     padding: 0.5em;
+    max-width: 33.3%;
+    min-width: 33.3%;
   }
 
   label > div {
@@ -208,6 +263,14 @@ export default {
     font-size: 1em;
     font-weight: 500;
     width: 100%;
+  }
+
+  @media (max-width: 450px) {
+    flex-direction: column;
+
+    > * {
+      max-width: 100%;
+    }
   }
 }
 
@@ -236,6 +299,7 @@ export default {
 .flexEnter {
   flex: 0.01;
   flex: 0.00001;
+  min-width: 0%;
 }
 
 .flexLeave {

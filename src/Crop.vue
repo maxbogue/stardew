@@ -16,12 +16,16 @@
     <Drawer :show="showInfo">
       <ul :class="$style.infos">
         <li :class="$style.info">
-          <div>Seed Price</div>
+          <div>Seed Cost</div>
           <div>{{ crop.seedPrice | wholeNumber }}g</div>
         </li>
         <li :class="$style.info">
-          <div>Sell Price</div>
+          <div>Sell Value</div>
           <div>{{ crop.sellPrice | wholeNumber }}g</div>
+        </li>
+        <li v-if="crop.artisanSellPrice" :class="$style.info">
+          <div>Artisan Value</div>
+          <div>{{ crop.artisanSellPrice | wholeNumber }}g</div>
         </li>
         <li v-if="!isGreenhouse || !crop.regrowth" :class="$style.info">
           <div>Growth</div>
@@ -31,14 +35,21 @@
           <div>Regrowth</div>
           <div>{{ crop.regrowth | wholeNumber }} days</div>
         </li>
-        <li v-if="crop.harvests" :class="$style.info">
+        <li :class="$style.info">
+          <div>Yield</div>
+          <div>{{ crop.yield }}</div>
+        </li>
+        <li v-if="!isGreenhouse" :class="$style.info">
           <div>Harvests</div>
-          <div>
-            {{ crop.harvests
-            }}<template v-if="crop.yield > 1"
-              >x{{ crop.yield | wholeNumber }}</template
-            >
-          </div>
+          <div>{{ crop.harvests }}</div>
+        </li>
+        <li :class="$style.info">
+          <div>Revenue</div>
+          <div>{{ crop.revenue | wholeNumber }}g</div>
+        </li>
+        <li :class="$style.info">
+          <div>Costs</div>
+          <div>{{ crop.costs | wholeNumber }}g</div>
         </li>
         <li :class="$style.info">
           <div>Profit</div>
@@ -180,7 +191,7 @@ export default {
 
 .infos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   margin: 0;
   padding: 4px 0 0;
   list-style: none;
