@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.container">
+  <div :class="[$style.container, $style['container--' + seasonName]]">
     <div :class="$style.card">
       <h1>Stardew Crops</h1>
       <div :class="$style.controls">
@@ -120,6 +120,17 @@
           more realistic than the theoretical ~10.
         </li>
       </ul>
+      <footer :class="$style.footer">
+        <a href="https://www.stardewvalley.net/" target="_blank"
+          >Stardew Valley</a
+        >
+        <span>&copy;</span>
+        <a href="https://twitter.com/concernedape" target="_blank"
+          >ConcernedApe</a
+        >
+        <span>| Contribute on</span>
+        <a href="https://github.com/maxbogue/stardew" target="_blank">Github</a>
+      </footer>
     </div>
   </div>
 </template>
@@ -217,6 +228,26 @@ export default {
 .container {
   margin: 1em auto 0;
   max-width: 820px;
+
+  &--greenhouse {
+    --season-color: hsla(88, 50%, 67%, 0.5);
+    --season-color-dark: hsla(88, 50%, 67%, 0.7);
+  }
+
+  &--spring {
+    --season-color: hsla(340, 82%, 76%, 0.5);
+    --season-color-dark: hsla(340, 82%, 76%, 0.7);
+  }
+
+  &--summer {
+    --season-color: hsla(202, 92%, 74%, 0.5);
+    --season-color-dark: hsla(202, 92%, 74%, 0.7);
+  }
+
+  &--fall {
+    --season-color: hsla(36, 100%, 65%, 0.5);
+    --season-color-dark: hsla(36, 100%, 65%, 0.7);
+  }
 }
 
 .card {
@@ -288,6 +319,21 @@ export default {
   margin: 0;
   padding: 0.5em 0.5em 0.5em 2em;
   line-height: 1.4;
+}
+
+.footer {
+  padding: 0.5em;
+  font-size: 12px;
+  text-align: center;
+
+  a {
+    color: hsl(200, 100%, 40%);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .flexActive {

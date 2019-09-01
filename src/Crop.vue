@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$style.crop, $style['crop--' + seasonName]]">
+  <div :class="$style.crop">
     <div
       v-ripple.400="'rgba(255, 255, 255, 0.25)'"
       role="button"
@@ -130,26 +130,6 @@ export default {
 <style lang="scss" module>
 .crop {
   margin: 4px 0;
-
-  &--greenhouse {
-    --bar-color: hsla(88, 50%, 67%, 0.5);
-    --bar-color-dark: hsla(88, 50%, 67%, 0.7);
-  }
-
-  &--spring {
-    --bar-color: hsla(340, 82%, 76%, 0.5);
-    --bar-color-dark: hsla(340, 82%, 76%, 0.7);
-  }
-
-  &--summer {
-    --bar-color: hsla(202, 92%, 74%, 0.5);
-    --bar-color-dark: hsla(202, 92%, 74%, 0.7);
-  }
-
-  &--fall {
-    --bar-color: hsla(36, 100%, 65%, 0.5);
-    --bar-color-dark: hsla(36, 100%, 65%, 0.7);
-  }
 }
 
 .bar {
@@ -158,17 +138,17 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding: 4px;
-  background-color: var(--bar-color);
+  background-color: var(--season-color);
   font-size: 1.2em;
 
   &:hover {
     cursor: pointer;
-    background-color: var(--bar-color-dark);
+    background-color: var(--season-color-dark);
   }
 
   &::before {
     content: '';
-    background-color: var(--bar-color);
+    background-color: var(--season-color);
     height: 100%;
     width: var(--bar-width);
     position: absolute;
