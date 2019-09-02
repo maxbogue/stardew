@@ -121,17 +121,25 @@
         </li>
       </ul>
       <footer :class="$style.footer">
-        <a href="https://www.stardewvalley.net/" target="_blank"
+        <a href="https://www.stardewvalley.net/" target="_blank" rel="noopener"
           >Stardew Valley</a
         >
         &copy;
-        <a href="https://twitter.com/concernedape" target="_blank"
+        <a
+          href="https://twitter.com/concernedape"
+          target="_blank"
+          rel="noopener"
           >ConcernedApe</a
         >
         | Code on
-        <a href="https://github.com/maxbogue/stardew" target="_blank">Github</a>
+        <a
+          href="https://github.com/maxbogue/stardew"
+          target="_blank"
+          rel="noopener"
+          >Github</a
+        >
         | Made using
-        <a href="https://vuejs.org/" target="_blank">Vue</a>
+        <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue</a>
       </footer>
     </div>
   </div>
@@ -329,7 +337,7 @@ export default {
   text-align: center;
 
   a {
-    color: hsl(200, 100%, 40%);
+    color: #1565c0;
     text-decoration: none;
 
     &:hover {

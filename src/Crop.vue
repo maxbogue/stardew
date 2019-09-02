@@ -3,6 +3,7 @@
     <div
       v-ripple.400="'rgba(255, 255, 255, 0.25)'"
       role="button"
+      :aria-expanded="showInfo.toString()"
       :class="$style.bar"
       :style="barStyles"
       @click="showInfo = !showInfo"
