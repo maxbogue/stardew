@@ -124,12 +124,14 @@
         <a href="https://www.stardewvalley.net/" target="_blank"
           >Stardew Valley</a
         >
-        <span>&copy;</span>
+        &copy;
         <a href="https://twitter.com/concernedape" target="_blank"
           >ConcernedApe</a
         >
-        <span>| Contribute on</span>
+        | Code on
         <a href="https://github.com/maxbogue/stardew" target="_blank">Github</a>
+        | Made using
+        <a href="https://vuejs.org/" target="_blank">Vue</a>
       </footer>
     </div>
   </div>
