@@ -1,5 +1,6 @@
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
+const { DefinePlugin } = require('webpack');
 
 const sassLoader = {
   loader: 'sass-loader',
@@ -62,7 +63,12 @@ module.exports = {
       },
     ],
   },
-  plugins: [new VueLoaderPlugin()],
+  plugins: [
+    new VueLoaderPlugin(),
+    new DefinePlugin({
+      VERSION: JSON.stringify(require('./package.json').version),
+    }),
+  ],
   resolve: {
     extensions: ['.ts', '.js', '.vue', '.json'],
     alias: {

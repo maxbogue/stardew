@@ -122,7 +122,7 @@
       </ul>
       <div :class="$style.footer">
         <a href="https://www.stardewvalley.net/" target="_blank" rel="noopener"
-          >Stardew Valley</a
+          >Stardew Valley v1.3.36</a
         >
         &copy;
         <a
@@ -131,7 +131,7 @@
           rel="noopener"
           >ConcernedApe</a
         >
-        | Code on
+        | Code v{{ VERSION }} on
         <a
           href="https://github.com/maxbogue/stardew"
           target="_blank"
@@ -146,6 +146,7 @@
 </template>
 
 <script>
+/* globals VERSION */
 import { sortBy } from 'lodash/fp';
 
 import { createCrop, growsInSeason } from './crop';
@@ -187,6 +188,7 @@ export default {
     },
   },
   data: () => ({
+    VERSION: VERSION,
     baseCrops,
     seasonName: 'spring',
     fertilizer: 'none',
