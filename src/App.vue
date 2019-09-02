@@ -1,6 +1,6 @@
 <template>
   <div :class="[$style.container, $style['container--' + seasonName]]">
-    <div :class="$style.card">
+    <header :class="$style.card">
       <h1>Stardew Crops</h1>
       <div :class="$style.controls">
         <label>
@@ -39,7 +39,7 @@
           <div>Processing</div>
           <select v-model="processing">
             <option value="none">None</option>
-            <option value="best">Best</option>
+            <option value="best">Most Profitable</option>
             <option value="jar">Jar</option>
             <option value="keg">Keg</option>
           </select>
@@ -81,8 +81,8 @@
           </label>
         </transition>
       </div>
-    </div>
-    <div :class="[$style.card, $style.crops]">
+    </header>
+    <main :class="[$style.card, $style.crops]">
       <h2 :class="$style.cropsHeader">
         <span>Crop</span>
         <span>g/day</span>
@@ -96,8 +96,8 @@
         :max-g-per-day="sortedCrops[0].gPerDay"
         :key="crop.name"
       />
-    </div>
-    <div :class="$style.card">
+    </main>
+    <footer :class="$style.card">
       <ul :class="$style.notes">
         <li>
           Multi-season crops are calculated assuming they are planted for all
@@ -120,7 +120,7 @@
           more realistic than the theoretical ~10.
         </li>
       </ul>
-      <footer :class="$style.footer">
+      <div :class="$style.footer">
         <a href="https://www.stardewvalley.net/" target="_blank" rel="noopener"
           >Stardew Valley</a
         >
@@ -140,8 +140,8 @@
         >
         | Made using
         <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue</a>
-      </footer>
-    </div>
+      </div>
+    </footer>
   </div>
 </template>
 
