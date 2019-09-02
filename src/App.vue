@@ -138,9 +138,9 @@
 <script>
 import { sortBy } from 'lodash/fp';
 
+import { createCrop, growsInSeason } from './crop';
 import Crop from './Crop.vue';
 import baseCrops from './crops.json';
-import { createCrop, growsInSeason } from './crop';
 
 const FERTILIZERS = {
   none: {
