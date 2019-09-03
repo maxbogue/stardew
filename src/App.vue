@@ -28,11 +28,13 @@
           </select>
         </label>
         <label>
-          <div>Speed-Gro</div>
+          <div>Fertilizer</div>
           <select v-model="fertilizer">
             <option value="none">None</option>
             <option value="speedGro">Speed-Gro</option>
             <option value="deluxeSpeedGro">Deluxe Speed-Gro</option>
+            <option value="basicFertilizer">Basic Fertilizer</option>
+            <option value="qualityFertilizer">Quality Fertilizer</option>
           </select>
         </label>
         <label>
@@ -172,6 +174,16 @@ const FERTILIZERS = {
     cost: 80,
     speed: 0.75,
     quality: 0,
+  },
+  basicFertilizer: {
+    cost: 100,
+    speed: 1,
+    quality: 1,
+  },
+  qualityFertilizer: {
+    cost: 150,
+    speed: 1,
+    quality: 2,
   },
 };
 
