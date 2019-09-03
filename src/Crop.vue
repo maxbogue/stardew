@@ -36,13 +36,13 @@
           <div>Regrowth</div>
           <div>{{ crop.regrowth | wholeNumber }} days</div>
         </li>
-        <li :class="$style.info">
-          <div>Yield</div>
-          <div>{{ crop.yield }}</div>
-        </li>
         <li v-if="!isGreenhouse" :class="$style.info">
           <div>Harvests</div>
           <div>{{ crop.harvests }}</div>
+        </li>
+        <li :class="$style.info">
+          <div>Yield</div>
+          <div>{{ crop.harvests * crop.yield }}</div>
         </li>
         <li :class="$style.info">
           <div>Revenue</div>

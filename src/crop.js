@@ -133,7 +133,7 @@ const _createCrop = (options, baseCrop) => {
     const fertilizers = crop.regrowth ? 1 : crop.seasons;
     crop.costs =
       crop.seedPrice * plantings + options.fertilizer.cost * fertilizers;
-    crop.growthTime = crop.seasons * 28;
+    crop.growthTime = crop.seasons * 28 - 1;
   } else {
     // Greenhouse
     // Amortized cost of infinte regrowth is 0.
