@@ -104,8 +104,8 @@
           their seasons.
         </li>
         <li>
-          In seasonal views, the entirety of the season's growth time is counted
-          even if some days are unused by the crop.
+          The entirety of the season's growth time is counted even if some days
+          are unused by the crop.
         </li>
         <li>
           Prices for seeds and fertilizers are based on the cheapest option
