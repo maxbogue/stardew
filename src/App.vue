@@ -111,7 +111,7 @@
         </li>
         <li>
           Prices for seeds and fertilizers are based on the cheapest option
-          between Pierre's, Joja, and Oasis.
+          between Pierre's and Oasis.
         </li>
         <li>
           If seeds cannot be regularly bought, their price is calculated based
@@ -120,10 +120,6 @@
         <li>
           Greenhouse values ignore the initial growth period of crops with
           regrowth since they last forever.
-        </li>
-        <li>
-          Keg processing time for Coffee Beans is set for 2 Coffee per day to be
-          more realistic than the theoretical ~10.
         </li>
       </ul>
       <div :class="$style.footer">

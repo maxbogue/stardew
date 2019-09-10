@@ -77,7 +77,7 @@
     "seedPrice": 15,
     "sellPrice": 15,
     "kegSellPrice": 30,
-    "kegTime": 0.1,
+    "kegTime": 0.025,
     "yield": 4,
     "growth": 10,
     "regrowth": 2,
