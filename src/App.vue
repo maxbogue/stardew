@@ -57,7 +57,7 @@
         >
           <label v-if="processing !== 'none'">
             <div>Time</div>
-            <select v-model="time">
+            <select v-model="timeOption">
               <option value="combined">Growth + Processing</option>
               <option value="growth">Growth</option>
               <option value="processing">Processing</option>
@@ -238,7 +238,8 @@ export default {
       processing: {
         defaultVal: 'none',
       },
-      time: {
+      timeOption: {
+        param: 'time',
         defaultVal: 'combined',
       },
       level: {
@@ -249,6 +250,9 @@ export default {
         defaultVal: 'none',
       },
     }),
+    time() {
+      return this.processing === 'none' ? 'growth' : this.timeOption;
+    },
     season() {
       return seasonFromName(this.seasonName);
     },
@@ -257,7 +261,7 @@ export default {
         season: this.season,
         fertilizer: FERTILIZERS[this.fertilizer],
         processing: this.processing,
-        time: this.processing === 'none' ? 'growth' : this.time,
+        time: this.time,
         level: parseInt(this.level),
         skipProcessing: this.skipProcessing,
       };
