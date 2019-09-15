@@ -165,12 +165,12 @@ const FERTILIZERS = {
   },
   speed: {
     cost: 100,
-    speed: 0.9,
+    speed: 1.1,
     quality: 0,
   },
   deluxe: {
     cost: 80,
-    speed: 0.75,
+    speed: 1.25,
     quality: 0,
   },
   basic: {

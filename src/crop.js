@@ -121,7 +121,7 @@ const _createCrop = (options, baseCrop) => {
     crop.artisanSellPrice = getArtisanSellPrice(crop) * artisanMultiplier;
   }
   crop.sellPrice *= options.level >= 5 ? 1.1 : 1;
-  crop.growth = Math.floor(crop.growth * options.fertilizer.speed);
+  crop.growth = Math.floor(crop.growth / options.fertilizer.speed);
 
   crop.harvests = getHarvests(options, crop);
   crop.revenue = getRevenue(options, crop);
