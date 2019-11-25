@@ -69,10 +69,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
+
 import Drawer from './Drawer.vue';
 
-export default {
+export default Vue.extend({
   components: {
     Drawer,
   },
@@ -125,7 +127,7 @@ export default {
       };
     },
   },
-};
+});
 </script>
 
 <style lang="scss" module>

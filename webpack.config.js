@@ -11,7 +11,7 @@ const sassLoader = {
 
 module.exports = {
   entry: {
-    app: './src/app.js',
+    app: './src/index.ts',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -24,7 +24,7 @@ module.exports = {
       },
       {
         test: /\.ts$/,
-        loader: 'awesome-typescript-loader',
+        loader: 'ts-loader',
         options: {
           appendTsSuffixTo: [/\.vue$/],
           silent: true,

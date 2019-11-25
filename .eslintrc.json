@@ -1,4 +1,8 @@
 {
+    "plugins": [
+      "@typescript-eslint",
+      "simple-import-sort"
+    ],
     "env": {
         "browser": true,
         "node": true,
@@ -7,12 +11,11 @@
     },
     "extends": [
         "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
         "plugin:vue/recommended",
         "plugin:prettier/recommended",
         "plugin:lodash-fp/recommended"
-    ],
-    "plugins": [
-      "simple-import-sort"
     ],
     "parserOptions": {
         "parser": "babel-eslint",

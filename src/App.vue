@@ -147,11 +147,13 @@
   </div>
 </template>
 
-<script>
-/* globals VERSION */
+<script lang="ts">
+declare const VERSION: string;
+
 import identity from 'lodash/fp/identity';
 import mapValues1 from 'lodash/fp/mapValues';
 import sortBy from 'lodash/fp/sortBy';
+import Vue from 'vue';
 
 import { createCrop, growsInSeason } from './crop';
 import Crop from './Crop.vue';
@@ -188,7 +190,7 @@ const FERTILIZERS = {
 export const mapValues = mapValues1.convert({ cap: false });
 
 export const mapQueryParams = mapValues(
-  ({ param, defaultVal = '', parse = identity, alsoSet = {} } = {}, key) => ({
+  ({ param, defaultVal = '', parse = identity, alsoSet = {} }, key) => ({
     get() {
       const value = this.$route.query[param || key];
       return value !== undefined ? parse(value) : defaultVal;
@@ -209,7 +211,7 @@ export const mapQueryParams = mapValues(
 const seasonFromName = seasonName =>
   ['greenhouse', 'spring', 'summer', 'fall'].indexOf(seasonName);
 
-export default {
+export default Vue.extend({
   components: {
     Crop,
   },
@@ -279,7 +281,7 @@ export default {
     },
   },
   methods: {},
-};
+});
 </script>
 
 <style lang="scss" module>

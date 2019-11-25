@@ -14,7 +14,9 @@
   </transition>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
+
 function doubleRaf() {
   return new Promise(resolve => {
     requestAnimationFrame(() => {
@@ -25,7 +27,7 @@ function doubleRaf() {
   });
 }
 
-export default {
+export default Vue.extend({
   props: {
     show: { type: Boolean, required: true },
   },
@@ -33,7 +35,7 @@ export default {
     return {
       active: false,
       innerShow: this.show,
-      height: this.show ? this.$refs.drawer.scrollHeight : 0,
+      height: 0,
     };
   },
   computed: {
@@ -82,7 +84,7 @@ export default {
       this.innerShow = false;
     },
   },
-};
+});
 </script>
 
 <style lang="scss" module>
