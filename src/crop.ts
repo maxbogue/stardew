@@ -21,9 +21,9 @@ const pickProcessing = (options, crop) => {
     return options.processing;
   }
 
-  const jarCrop = createCrop({ ...options, processing: 'jar' }, crop);
-  const kegCrop = createCrop({ ...options, processing: 'keg' }, crop);
-  const noneCrop = createCrop({ ...options, processing: 'none' }, crop);
+  const jarCrop = _createCrop({ ...options, processing: 'jar' }, crop);
+  const kegCrop = _createCrop({ ...options, processing: 'keg' }, crop);
+  const noneCrop = _createCrop({ ...options, processing: 'none' }, crop);
   if (
     jarCrop.gPerDay > noneCrop.gPerDay ||
     kegCrop.gPerDay > noneCrop.gPerDay
@@ -108,7 +108,7 @@ const getRevenue = (options, crop) => {
   throw new Error('Unreachable.');
 };
 
-const _createCrop = (options, baseCrop) => {
+function _createCrop(options, baseCrop) {
   const crop = { ...baseCrop };
 
   if (!crop.seedPrice) {
@@ -155,7 +155,7 @@ const _createCrop = (options, baseCrop) => {
   crop.gPerDay = crop.time ? crop.profit / crop.time : 0;
 
   return crop;
-};
+}
 
 export const createCrop = curry(_createCrop);
 

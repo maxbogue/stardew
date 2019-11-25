@@ -148,7 +148,11 @@
 </template>
 
 <script lang="ts">
-declare const VERSION: string;
+declare global {
+  interface Window {
+    VERSION: string;
+  }
+}
 
 import identity from 'lodash/fp/identity';
 import mapValues1 from 'lodash/fp/mapValues';
@@ -225,7 +229,7 @@ export default Vue.extend({
     },
   },
   data: () => ({
-    VERSION: VERSION,
+    VERSION: window.VERSION,
     baseCrops,
   }),
   computed: {

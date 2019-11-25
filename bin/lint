@@ -10,13 +10,13 @@ fi
 
 STATUS=0
 
-JS_FILES=$($GIT_CMD | egrep "\.(js|vue)$")
+JS_FILES=$($GIT_CMD | egrep "\.(js|ts|vue)$")
 if [ "$JS_FILES" != "" ]; then
-  eslint $JS_FILES --fix || STATUS=1
+  eslint --fix $JS_FILES || STATUS=1
 fi
 
 if [ "$1" = "staged" ]; then
-  git add $JS_FILES $TS_FILES
+  git add $JS_FILES
 fi
 
 exit $STATUS
