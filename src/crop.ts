@@ -1,11 +1,13 @@
 import curry from 'lodash/fp/curry';
 
+import { Crop, Processing, Season } from '@/types';
+
 const SEED_MAKER_AVERAGE_YIELD = 2 * 0.975;
 
-const getJarSellPrice = ({ category, sellPrice }) =>
+const getJarSellPrice = ({ category, sellPrice }): number =>
   category === 'other' ? 0 : sellPrice * 2 + 50;
 
-const getKegSellPrice = ({ category, sellPrice, kegSellPrice }) => {
+const getKegSellPrice = ({ category, sellPrice, kegSellPrice }): number => {
   if (kegSellPrice) {
     return kegSellPrice;
   } else if (category === 'fruit') {
@@ -16,7 +18,7 @@ const getKegSellPrice = ({ category, sellPrice, kegSellPrice }) => {
   return 0;
 };
 
-const pickProcessing = (options, crop) => {
+const pickProcessing = (options, crop): Processing => {
   if (options.processing !== 'best') {
     return options.processing;
   }
@@ -29,14 +31,14 @@ const pickProcessing = (options, crop) => {
     kegCrop.gPerDay > noneCrop.gPerDay
   ) {
     if (jarCrop.gPerDay >= kegCrop.gPerDay) {
-      return 'jar';
+      return Processing.Jar;
     }
-    return 'keg';
+    return Processing.Keg;
   }
-  return 'none';
+  return Processing.None;
 };
 
-const getArtisanSellPrice = crop => {
+const getArtisanSellPrice = (crop): number => {
   if (crop.processing === 'jar') {
     return getJarSellPrice(crop);
   } else if (crop.processing === 'keg') {
@@ -45,7 +47,7 @@ const getArtisanSellPrice = crop => {
   throw new Error(`Invalid processing: ${crop.processing}`);
 };
 
-const getHarvests = ({ season }, { seasons, growth, regrowth }) => {
+const getHarvests = ({ season }, { seasons, growth, regrowth }): number => {
   if (!season) {
     return 1; // Greenhouse
   }
@@ -54,7 +56,7 @@ const getHarvests = ({ season }, { seasons, growth, regrowth }) => {
   return 1 + Math.floor(daysAfterGrowth / (regrowth || growth));
 };
 
-const getProcessingTime = ({ category, processing, kegTime }) => {
+const getProcessingTime = ({ category, processing, kegTime }): number => {
   if (processing === 'none') {
     return 0;
   } else if (processing === 'jar') {
@@ -73,7 +75,7 @@ const getProcessingTime = ({ category, processing, kegTime }) => {
 // P(gold) = 0.01 + 0.2 * (lvl/10 + q * (lvl+2)/12)
 // P(silver) = MIN(2*P(gold),0.75) * (1-P(gold))
 // P(normal) = 1 - P(silver) - P(gold)
-const getCropQualityProbabilities = ({ level, fertilizer }) => {
+const getCropQualityProbabilities = ({ level, fertilizer }): number[] => {
   const pGold =
     0.01 + 0.2 * (level / 10 + (fertilizer.quality * (level + 2)) / 12);
   const pSilver = Math.min(2 * pGold, 0.75) * (1 - pGold);
@@ -81,7 +83,7 @@ const getCropQualityProbabilities = ({ level, fertilizer }) => {
   return [pNormal, pSilver, pGold];
 };
 
-const getRevenue = (options, crop) => {
+const getRevenue = (options, crop): number => {
   const [pNormal, pSilver, pGold] = getCropQualityProbabilities(options);
   const normalYield =
     crop.harvests * pNormal + crop.harvests * (crop.yield - 1);
@@ -108,7 +110,7 @@ const getRevenue = (options, crop) => {
   throw new Error('Unreachable.');
 };
 
-function _createCrop(options, baseCrop) {
+function _createCrop(options, baseCrop): Crop {
   const crop = { ...baseCrop };
 
   if (!crop.seedPrice) {
@@ -159,7 +161,7 @@ function _createCrop(options, baseCrop) {
 
 export const createCrop = curry(_createCrop);
 
-export const growsInSeason = season => crop => {
+export const growsInSeason = (season: Season) => (crop: Crop): boolean => {
   if (!season) {
     return true;
   }

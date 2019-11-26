@@ -1,8 +1,8 @@
 const MAX_TIME_PER_CHUNK = 50;
 
-export function asyncFor(n, fn, end) {
+export function asyncFor(n, fn, end): void {
   let i = 0;
-  function doChunk() {
+  function doChunk(): void {
     const startTime = Date.now();
     for (; i < n && Date.now() - startTime <= MAX_TIME_PER_CHUNK; i++) {
       fn(i);

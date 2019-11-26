@@ -17,7 +17,7 @@
 <script lang="ts">
 import Vue from 'vue';
 
-function doubleRaf() {
+function doubleRaf(): Promise<void> {
   return new Promise(resolve => {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -39,10 +39,10 @@ export default Vue.extend({
     };
   },
   computed: {
-    maxHeight() {
+    maxHeight(): string {
       return this.height + 'px';
     },
-    styles() {
+    styles(): Record<string, string> {
       if (!this.active) {
         return null;
       }
@@ -52,7 +52,7 @@ export default Vue.extend({
     },
   },
   watch: {
-    show(show) {
+    show(show): void {
       if (show) {
         this.open();
       } else {
@@ -61,7 +61,7 @@ export default Vue.extend({
     },
   },
   methods: {
-    async open() {
+    async open(): Promise<void> {
       // Briefly override the v-show style to grab the target height.
       const { drawer } = this.$refs;
       drawer.style.display = 'block';
@@ -75,7 +75,7 @@ export default Vue.extend({
       this.height = height;
       this.innerShow = true;
     },
-    async close() {
+    async close(): Promise<void> {
       this.active = true;
       this.height = this.$refs.drawer.scrollHeight;
 

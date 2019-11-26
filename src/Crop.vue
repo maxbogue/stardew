@@ -72,23 +72,24 @@
 <script lang="ts">
 import Vue from 'vue';
 
-import Drawer from './Drawer.vue';
+import Drawer from '@/Drawer.vue';
+import { Season } from '@/types';
 
 export default Vue.extend({
   components: {
     Drawer,
   },
   filters: {
-    wholeNumber(n) {
+    wholeNumber(n): string {
       return Math.round(n).toLocaleString();
     },
-    twoDecimals(n) {
+    twoDecimals(n): string {
       return n.toLocaleString(undefined, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       });
     },
-    maxOneDecimal(n) {
+    maxOneDecimal(n): string {
       return n.toLocaleString(undefined, {
         maximumFractionDigits: 1,
       });
@@ -105,10 +106,10 @@ export default Vue.extend({
     showInfo: false,
   }),
   computed: {
-    isGreenhouse() {
-      return this.seasonName === 'greenhouse';
+    isGreenhouse(): boolean {
+      return this.seasonName === Season.Greenhouse;
     },
-    notes() {
+    notes(): string {
       const notes = [];
       if (this.processing === 'best') {
         notes.push(this.crop.processing);
@@ -118,10 +119,10 @@ export default Vue.extend({
       }
       return notes.join(', ');
     },
-    barPercentage() {
+    barPercentage(): number {
       return (100 * this.crop.gPerDay) / this.maxGPerDay;
     },
-    barStyles() {
+    barStyles(): Record<string, string> {
       return {
         '--bar-width': `${this.barPercentage.toFixed(2)}%`,
       };
