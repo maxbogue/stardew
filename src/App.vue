@@ -169,9 +169,7 @@ import {
 } from '@/types';
 
 declare global {
-  interface Window {
-    VERSION: string;
-  }
+  const VERSION: string;
 }
 
 const FERTILIZERS: Record<FertilizerOption, Fertilizer> = {
@@ -264,7 +262,7 @@ const seasonFromName = (seasonName: string): Season =>
   }),
 })
 export default class App extends Vue {
-  VERSION = window.VERSION;
+  VERSION = VERSION;
   baseCrops = baseCrops;
 
   seasonName: string;

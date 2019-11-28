@@ -39,9 +39,9 @@ const pickProcessing = (options, crop): Processing => {
 };
 
 const getArtisanSellPrice = (crop): number => {
-  if (crop.processing === 'jar') {
+  if (crop.processing === Processing.Jar) {
     return getJarSellPrice(crop);
-  } else if (crop.processing === 'keg') {
+  } else if (crop.processing === Processing.Keg) {
     return getKegSellPrice(crop);
   }
   throw new Error(`Invalid processing: ${crop.processing}`);
