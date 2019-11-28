@@ -1,6 +1,6 @@
 import curry from 'lodash/fp/curry';
 
-import { Crop, Processing, Season } from '@/types';
+import { Crop, Processing, Season, SkipProcessing } from '@/types';
 
 const SEED_MAKER_AVERAGE_YIELD = 2 * 0.975;
 
@@ -74,7 +74,7 @@ const getProcessingTime = ({ category, processing, kegTime }): number => {
 // Formula taken from https://stardewvalleywiki.com/Farming:
 // P(gold) = 0.01 + 0.2 * (lvl/10 + q * (lvl+2)/12)
 // P(silver) = MIN(2*P(gold),0.75) * (1-P(gold))
-// P(normal) = 1 - P(silver) - P(gold)
+// P(normal) = 1 - P(silver) - P(gold,
 const getCropQualityProbabilities = ({ level, fertilizer }): number[] => {
   const pGold =
     0.01 + 0.2 * (level / 10 + (fertilizer.quality * (level + 2)) / 12);
@@ -94,16 +94,16 @@ const getRevenue = (options, crop): number => {
   const silverValue = silverYield * crop.sellPrice * 1.25;
   const goldValue = goldYield * crop.sellPrice * 1.5;
 
-  if (crop.processing === 'none') {
+  if (crop.processing === Processing.None) {
     crop.artisanYield = 0;
     return normalValue + silverValue + goldValue;
-  } else if (options.skipProcessing === 'starred') {
+  } else if (options.skipProcessing === SkipProcessing.Starred) {
     crop.artisanYield = normalYield;
     return silverValue + goldValue + crop.artisanYield * crop.artisanSellPrice;
-  } else if (options.skipProcessing === 'gold') {
+  } else if (options.skipProcessing === SkipProcessing.Gold) {
     crop.artisanYield = normalYield + silverYield;
     return goldValue + crop.artisanYield * crop.artisanSellPrice;
-  } else if (options.skipProcessing === 'none') {
+  } else if (options.skipProcessing === SkipProcessing.None) {
     crop.artisanYield = normalYield + silverYield + goldYield;
     return crop.artisanYield * crop.artisanSellPrice;
   }

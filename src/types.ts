@@ -10,6 +10,14 @@ export interface Fertilizer {
   cost: number;
 }
 
+export enum FertilizerOption {
+  None = 'none',
+  Speed = 'speed',
+  Deluxe = 'deluxe',
+  Basic = 'basic',
+  Quality = 'quality',
+}
+
 export enum Processing {
   None = 'none',
   Keg = 'keg',
@@ -18,11 +26,11 @@ export enum Processing {
 
 export enum SkipProcessing {
   None = 'none',
-  Silver = 'silver',
   Gold = 'gold',
+  Starred = 'starred',
 }
 
-export enum ProcessingOptions {
+export enum ProcessingOption {
   None = 'none',
   Keg = 'keg',
   Jar = 'jar',
@@ -34,6 +42,13 @@ export enum Season {
   Spring = 1,
   Summer = 2,
   Fall = 3,
+}
+
+export enum TimeOption {
+  Growth = 'growth',
+  // eslint-disable-next-line no-shadow
+  Processing = 'processing',
+  Combined = 'combined',
 }
 
 export interface BaseCrop {
@@ -67,8 +82,8 @@ export interface Crop extends BaseCrop {
 export interface Options {
   season: Season;
   fertilizer: Fertilizer;
-  processing: Processing;
-  time: number;
+  processing: ProcessingOption;
+  time: TimeOption;
   level: number;
   skipProcessing: SkipProcessing;
 }
