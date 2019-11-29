@@ -1,6 +1,10 @@
 const MAX_TIME_PER_CHUNK = 50;
 
-export function asyncFor(n, fn, end): void {
+export function asyncFor(
+  n: number,
+  fn: (i: number) => void,
+  end: () => void
+): void {
   let i = 0;
   function doChunk(): void {
     const startTime = Date.now();

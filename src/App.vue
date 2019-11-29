@@ -273,9 +273,7 @@ export default class App extends Vue {
   skipProcessing: SkipProcessing;
 
   get time(): TimeOption {
-    return this.processing === ProcessingOption.None
-      ? TimeOption.Growth
-      : this.timeOption;
+    return this.processing === 'none' ? TimeOption.Growth : this.timeOption;
   }
 
   get season(): Season {

@@ -18,11 +18,7 @@ export enum FertilizerOption {
   Quality = 'quality',
 }
 
-export enum Processing {
-  None = 'none',
-  Keg = 'keg',
-  Jar = 'jar',
-}
+export type Processing = 'none' | 'keg' | 'jar';
 
 export enum SkipProcessing {
   None = 'none',
@@ -30,12 +26,7 @@ export enum SkipProcessing {
   Starred = 'starred',
 }
 
-export enum ProcessingOption {
-  None = 'none',
-  Keg = 'keg',
-  Jar = 'jar',
-  Best = 'best',
-}
+export type ProcessingOption = Processing | 'best';
 
 export enum Season {
   Greenhouse = 0,
@@ -67,8 +58,8 @@ export interface BaseCrop {
 
 export interface Crop extends BaseCrop {
   processing: Processing;
-  artisanYield?: number;
-  artisanSellPrice?: number;
+  artisanYield: number;
+  artisanSellPrice: number;
   harvests: number;
   revenue: number;
   processingTime: number;
