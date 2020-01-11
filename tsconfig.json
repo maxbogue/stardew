@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "allowJs": true,
     "baseUrl": ".",
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -9,6 +10,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "resolveJsonModule": true,
+    "strict": true,
     "target": "esnext",
     "paths": {
       "@/*": ["src/*"]

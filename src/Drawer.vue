@@ -31,10 +31,10 @@ function doubleRaf(): Promise<void> {
 
 @Component
 export default class Drawer extends Vue {
-  $refs: { drawer: HTMLElement };
+  $refs!: { drawer: HTMLElement };
 
   @Prop({ type: Boolean, required: true })
-  readonly show: boolean;
+  readonly show!: boolean;
 
   active = false;
   innerShow = false;
@@ -44,7 +44,7 @@ export default class Drawer extends Vue {
     return this.height + 'px';
   }
 
-  get styles(): Record<string, string> {
+  get styles(): Record<string, string> | null {
     if (!this.active) {
       return null;
     }

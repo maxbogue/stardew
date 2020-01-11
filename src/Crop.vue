@@ -69,78 +69,63 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
+<script>
+import Drawer from './Drawer.vue';
 
-import Drawer from '@/Drawer.vue';
-import { Crop, Season } from '@/types';
-
-@Component({
+export default {
   components: {
     Drawer,
   },
   filters: {
-    wholeNumber(n): string {
+    wholeNumber(n) {
       return Math.round(n).toLocaleString();
     },
-    twoDecimals(n): string {
+    twoDecimals(n) {
       return n.toLocaleString(undefined, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       });
     },
-    maxOneDecimal(n): string {
+    maxOneDecimal(n) {
       return n.toLocaleString(undefined, {
         maximumFractionDigits: 1,
       });
     },
   },
-})
-export default class CropComponent extends Vue {
-  @Prop({ type: Object, required: true })
-  readonly crop: Crop;
-
-  @Prop({ type: String, required: true })
-  readonly seasonName: Season;
-
-  @Prop({ type: String, required: true })
-  readonly processing: string;
-
-  @Prop({ type: String, required: true })
-  readonly time: string;
-
-  @Prop({ type: Number, required: true })
-  readonly maxGPerDay: number;
-
-  showInfo = false;
-
-  get isGreenhouse(): boolean {
-    return this.seasonName === Season.Greenhouse;
-  }
-
-  get notes(): string {
-    const notes = [];
-    if (this.processing === 'best') {
-      notes.push(this.crop.processing);
-    }
-    if (!this.isGreenhouse && this.crop.seasons > 1) {
-      notes.push(`${this.crop.seasons} seasons`);
-    }
-    return notes.join(', ');
-  }
-
-  get barPercentage(): number {
-    return (100 * this.crop.gPerDay) / this.maxGPerDay;
-  }
-
-  get barStyles(): Record<string, string> {
-    return {
-      '--bar-width': `${this.barPercentage.toFixed(2)}%`,
-    };
-  }
-}
+  props: {
+    crop: { type: Object, required: true },
+    seasonName: { type: String, required: true },
+    processing: { type: String, required: true },
+    time: { type: String, required: true },
+    maxGPerDay: { type: Number, required: true },
+  },
+  data: () => ({
+    showInfo: false,
+  }),
+  computed: {
+    isGreenhouse() {
+      return this.seasonName === 'greenhouse';
+    },
+    notes() {
+      const notes = [];
+      if (this.processing === 'best') {
+        notes.push(this.crop.processing);
+      }
+      if (!this.isGreenhouse && this.crop.seasons > 1) {
+        notes.push(`${this.crop.seasons} seasons`);
+      }
+      return notes.join(', ');
+    },
+    barPercentage() {
+      return (100 * this.crop.gPerDay) / this.maxGPerDay;
+    },
+    barStyles() {
+      return {
+        '--bar-width': `${this.barPercentage.toFixed(2)}%`,
+      };
+    },
+  },
+};
 </script>
 
 <style lang="scss" module>
