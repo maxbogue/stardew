@@ -1,4 +1,5 @@
 {
+    "plugins": ["simple-import-sort"],
     "env": {
         "browser": true,
         "node": true,
@@ -7,12 +8,8 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:vue/recommended",
         "plugin:prettier/recommended",
         "plugin:lodash-fp/recommended"
-    ],
-    "plugins": [
-      "simple-import-sort"
     ],
     "parserOptions": {
         "parser": "babel-eslint",
@@ -50,17 +47,37 @@
         "prefer-const": ["error"],
         "require-atomic-updates": ["error"],
 
-        "simple-import-sort/sort": ["error"],
+        "simple-import-sort/sort": ["error"]
+    },
+    "overrides": [{
+        "files": ["*.ts", "*.vue"],
+        "plugins": ["@typescript-eslint"],
+        "extends": [
+            "plugin:@typescript-eslint/eslint-recommended",
+            "plugin:@typescript-eslint/recommended",
+            "plugin:vue/recommended"
+        ],
+        "parserOptions": {
+            "parser": "@typescript-eslint/parser",
+            "ecmaVersion": 8,
+            "sourceType": "module"
+        },
+        "rules": {
+            "@typescript-eslint/array-type": ["error", { "default": "array-simple" }],
+            "@typescript-eslint/explicit-member-accessibility": ["error", { "accessibility": "no-public" }],
+            "@typescript-eslint/indent": "off",
+            "@typescript-eslint/no-use-before-define": ["error", { "functions": false }],
 
-        "vue/attributes-order": ["off"],
-        "vue/component-name-in-template-casing": ["error", "PascalCase"],
-        "vue/html-closing-bracket-spacing": ["off"],
-        "vue/html-closing-bracket-newline": ["off"],
-        "vue/html-indent": ["off"],
-        "vue/html-self-closing": ["off"],
-        "vue/max-attributes-per-line": ["off"],
-        "vue/multiline-html-element-content-newline": ["off"],
-        "vue/no-v-html": ["off"],
-        "vue/singleline-html-element-content-newline": ["off"]
-    }
+            "vue/attributes-order": ["off"],
+            "vue/component-name-in-template-casing": ["error", "PascalCase"],
+            "vue/html-closing-bracket-spacing": ["off"],
+            "vue/html-closing-bracket-newline": ["off"],
+            "vue/html-indent": ["off"],
+            "vue/html-self-closing": ["off"],
+            "vue/max-attributes-per-line": ["off"],
+            "vue/multiline-html-element-content-newline": ["off"],
+            "vue/no-v-html": ["off"],
+            "vue/singleline-html-element-content-newline": ["off"]
+        }
+    }]
 }
