@@ -7,11 +7,12 @@
   "scripts": {
     "dev": "webpack --mode development --watch --progress",
     "build": "NODE_ENV=production webpack --mode production --progress --hide-modules",
+    "test": "mochapack --glob \"*.spec.ts\" src",
     "lint": "./bin/lint"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "./bin/lint staged"
+      "pre-commit": "npm run test && npm run lint staged"
     }
   },
   "dependencies": {
