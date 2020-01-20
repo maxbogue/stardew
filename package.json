@@ -1,7 +1,7 @@
 {
   "name": "Stardew",
   "description": "A Vue.js project",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "author": "Max Bogue <max@maxbogue.com>",
   "private": true,
   "scripts": {
