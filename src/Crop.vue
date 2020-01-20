@@ -69,20 +69,22 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
+
 import Drawer from './Drawer.vue';
 import { twoDecimals } from './utils';
 
-export default {
+export default Vue.extend({
   components: {
     Drawer,
   },
   filters: {
-    wholeNumber(n) {
+    wholeNumber(n: number): string {
       return Math.round(n).toLocaleString();
     },
     twoDecimals,
-    maxOneDecimal(n) {
+    maxOneDecimal(n: number): string {
       return n.toLocaleString(undefined, {
         maximumFractionDigits: 1,
       });
@@ -99,10 +101,10 @@ export default {
     showInfo: false,
   }),
   computed: {
-    isGreenhouse() {
+    isGreenhouse(): boolean {
       return this.seasonName === 'greenhouse';
     },
-    notes() {
+    notes(): string {
       const notes = [];
       if (this.processing === 'best') {
         notes.push(this.crop.processing);
@@ -112,16 +114,16 @@ export default {
       }
       return notes.join(', ');
     },
-    barPercentage() {
+    barPercentage(): number {
       return (100 * this.crop.gPerDay) / this.maxGPerDay;
     },
-    barStyles() {
+    barStyles(): { [key: string]: string } {
       return {
         '--bar-width': `${this.barPercentage.toFixed(2)}%`,
       };
     },
   },
-};
+});
 </script>
 
 <style lang="scss" module>
