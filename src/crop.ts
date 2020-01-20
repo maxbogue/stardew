@@ -170,6 +170,7 @@ function _createCrop(options: Options, baseCrop: BaseCrop): Crop {
   }
 
   const processing = pickProcessing(options, crop);
+  const artisanSellPrice = getArtisanSellPrice(options, crop, processing);
   crop.sellPrice *= options.level >= 5 ? 1.1 : 1;
   crop.growth = Math.floor(crop.growth * options.fertilizer.speed);
 
@@ -180,7 +181,6 @@ function _createCrop(options: Options, baseCrop: BaseCrop): Crop {
     processing,
     harvests
   );
-  const artisanSellPrice = getArtisanSellPrice(options, crop, processing);
   const revenue = nonArtisanValue + artisanYield * artisanSellPrice;
   const costs = getCosts(options, crop, harvests);
 

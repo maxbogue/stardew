@@ -71,6 +71,7 @@
 
 <script>
 import Drawer from './Drawer.vue';
+import { twoDecimals } from './utils';
 
 export default {
   components: {
@@ -80,12 +81,7 @@ export default {
     wholeNumber(n) {
       return Math.round(n).toLocaleString();
     },
-    twoDecimals(n) {
-      return n.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-    },
+    twoDecimals,
     maxOneDecimal(n) {
       return n.toLocaleString(undefined, {
         maximumFractionDigits: 1,
