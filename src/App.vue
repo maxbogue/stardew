@@ -147,17 +147,31 @@
   </div>
 </template>
 
-<script>
-/* globals VERSION */
-import identity from 'lodash/fp/identity';
-import mapValues1 from 'lodash/fp/mapValues';
+<script lang="ts">
+import 'vue-router';
+
 import sortBy from 'lodash/fp/sortBy';
+import mapValues from 'lodash/mapValues'; // eslint-disable-line lodash-fp/use-fp
+import Vue, { ComputedOptions } from 'vue';
 
-import { createCrop, growsInSeason } from './crop';
-import Crop from './Crop.vue';
-import baseCrops from './crops.json';
+import { createCrop, growsInSeason } from '@/crop';
+import CropComponent from '@/Crop.vue';
+import baseCrops from '@/crops.json';
+import {
+  BaseCrop,
+  Crop,
+  Fertilizer,
+  Options,
+  ProcessingOption,
+  SkipProcessing,
+  TimeOption,
+} from '@/types';
 
-const FERTILIZERS = {
+declare global {
+  const VERSION: string;
+}
+
+const FERTILIZERS: { [key: string]: Fertilizer } = {
   none: {
     cost: 0,
     speed: 1,
@@ -185,36 +199,52 @@ const FERTILIZERS = {
   },
 };
 
-export const mapValues = mapValues1.convert({ cap: false });
+interface Dict<T> {
+  [key: string]: T;
+}
 
-export const mapQueryParams = mapValues(
-  ({ param, defaultVal = '', parse = identity, alsoSet = {} } = {}, key) => ({
-    get() {
-      const value = this.$route.query[param || key];
-      return value !== undefined ? parse(value) : defaultVal;
-    },
-    set(newValue) {
-      this.$router.replace({
-        path: this.$route.path,
-        query: {
-          ...this.$route.query,
-          ...alsoSet,
-          [param || key]: newValue === defaultVal ? undefined : newValue,
-        },
-      });
-    },
-  })
-);
+export type Accessors<T> = {
+  [K in keyof T]: ComputedOptions<string>;
+};
 
-const seasonFromName = seasonName =>
+interface QueryParamOptions {
+  param?: string;
+  defaultVal?: string;
+  alsoSet?: { [param: string]: string };
+}
+
+function mapQueryParams<V extends Vue, T extends Dict<QueryParamOptions>>(
+  options: T
+): Accessors<T> {
+  return mapValues(
+    options,
+    ({ param, defaultVal = '' }: QueryParamOptions = {}, key: string) => ({
+      get(this: V): string {
+        const value = this.$route.query[param || key] as string | undefined;
+        return value !== undefined ? value : defaultVal;
+      },
+      set(this: V, newValue: string): void {
+        this.$router.replace({
+          path: this.$route.path,
+          query: {
+            ...this.$route.query,
+            [param || key]: newValue === defaultVal ? undefined : newValue,
+          },
+        });
+      },
+    })
+  );
+}
+
+const seasonFromName = (seasonName: string): number =>
   ['greenhouse', 'spring', 'summer', 'fall'].indexOf(seasonName);
 
-export default {
+export default Vue.extend({
   components: {
-    Crop,
+    Crop: CropComponent,
   },
   filters: {
-    capitalize(value) {
+    capitalize(value: string): string {
       if (!value) {
         return '';
       }
@@ -224,7 +254,7 @@ export default {
   },
   data: () => ({
     VERSION: VERSION,
-    baseCrops,
+    baseCrops: baseCrops as BaseCrop[],
   }),
   computed: {
     ...mapQueryParams({
@@ -250,36 +280,35 @@ export default {
         defaultVal: 'none',
       },
     }),
-    time() {
+    time(): string {
       return this.processing === 'none' ? 'growth' : this.timeOption;
     },
-    season() {
+    season(): number {
       return seasonFromName(this.seasonName);
     },
-    options() {
+    options(): Options {
       return {
         season: this.season,
-        fertilizer: FERTILIZERS[this.fertilizer],
-        processing: this.processing,
-        time: this.time,
+        fertilizer: FERTILIZERS[this.fertilizer] as Fertilizer,
+        processing: this.processing as ProcessingOption,
+        time: this.time as TimeOption,
         level: parseInt(this.level),
-        skipProcessing: this.skipProcessing,
+        skipProcessing: this.skipProcessing as SkipProcessing,
       };
     },
-    crops() {
+    crops(): Crop[] {
       return this.baseCrops.map(createCrop(this.options));
     },
-    filteredCrops() {
+    filteredCrops(): Crop[] {
       return this.crops
         .filter(growsInSeason(this.season))
         .filter(crop => crop.gPerDay > 0);
     },
-    sortedCrops() {
+    sortedCrops(): Crop[] {
       return sortBy('gPerDay', this.filteredCrops).reverse();
     },
   },
-  methods: {},
-};
+});
 </script>
 
 <style lang="scss" module>
