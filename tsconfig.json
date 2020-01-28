@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "allowJs": true,
     "baseUrl": ".",
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -13,7 +12,8 @@
     "strict": true,
     "target": "esnext",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "*": ["types/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.vue"]

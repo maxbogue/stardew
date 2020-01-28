@@ -7,12 +7,21 @@
   "scripts": {
     "dev": "webpack --mode development --watch --progress",
     "build": "NODE_ENV=production webpack --mode production --progress --hide-modules",
-    "test": "mochapack --glob \"*.spec.ts\" src",
+    "test": "jest",
     "lint": "./bin/lint"
   },
   "husky": {
     "hooks": {
       "pre-commit": "npm run test && npm run lint staged"
+    }
+  },
+  "jest": {
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "moduleNameMapper": {
+      "@/(.*)": "<rootDir>/src/$1"
     }
   },
   "dependencies": {
@@ -28,14 +37,12 @@
     "@babel/core": "^7.8.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@types/chai": "^4.2.7",
+    "@types/jest": "^25.1.0",
     "@types/lodash": "^4.14.149",
-    "@types/mocha": "^5.2.7",
     "@typescript-eslint/eslint-plugin": "^2.16.0",
     "@typescript-eslint/parser": "^2.16.0",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
-    "chai": "^4.2.0",
     "css-loader": "^3.4.2",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
@@ -45,8 +52,7 @@
     "eslint-plugin-vue": "^6.1.2",
     "file-loader": "^5.0.2",
     "husky": "^4.0.10",
-    "mocha": "^7.0.0",
-    "mochapack": "^1.1.13",
+    "jest": "^25.1.0",
     "prettier": "^1.19.1",
     "sass": "^1.25.0",
     "sass-loader": "^8.0.2",
@@ -58,6 +64,7 @@
     "stylelint-config-standard": "^19.0.0",
     "stylelint-processor-html": "^1.0.0",
     "stylelint-scss": "^3.13.0",
+    "ts-jest": "^25.0.0",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.5",
     "url-loader": "^3.0.0",

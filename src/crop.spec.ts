@@ -1,5 +1,3 @@
-import { expect } from 'chai';
-
 import { createCrop } from '@/crop';
 import crops from '@/crops.json';
 import { BaseCrop, Options, SkipProcessing, TimeOption } from '@/types';
@@ -59,7 +57,7 @@ describe('createCrop for Ancient Fruit', () => {
 
   cases.forEach(({ options, gPerDay }) => {
     it(JSON.stringify(options), () => {
-      expect(getGPerDay(options, crop)).to.equal(gPerDay);
+      expect(getGPerDay(options, crop)).toEqual(gPerDay);
     });
   });
 });
@@ -94,7 +92,7 @@ describe('createCrop for Coffee Bean', () => {
 
   cases.forEach(({ options, gPerDay }) => {
     it(JSON.stringify(options), () => {
-      expect(getGPerDay(options, crop)).to.equal(gPerDay);
+      expect(getGPerDay(options, crop)).toEqual(gPerDay);
     });
   });
 });
@@ -129,7 +127,7 @@ describe('createCrop for Hops', () => {
 
   cases.forEach(({ options, gPerDay }) => {
     it(JSON.stringify(options), () => {
-      expect(getGPerDay(options, crop)).to.equal(gPerDay);
+      expect(getGPerDay(options, crop)).toEqual(gPerDay);
     });
   });
 });
@@ -164,7 +162,7 @@ describe('createCrop for Pumpkin', () => {
 
   cases.forEach(({ options, gPerDay }) => {
     it(JSON.stringify(options), () => {
-      expect(getGPerDay(options, crop)).to.equal(gPerDay);
+      expect(getGPerDay(options, crop)).toEqual(gPerDay);
     });
   });
 });
@@ -199,7 +197,7 @@ describe('createCrop for Starfruit', () => {
 
   cases.forEach(({ options, gPerDay }) => {
     it(JSON.stringify(options), () => {
-      expect(getGPerDay(options, crop)).to.equal(gPerDay);
+      expect(getGPerDay(options, crop)).toEqual(gPerDay);
     });
   });
 });
@@ -234,7 +232,7 @@ describe('createCrop for Sweet Gem Berry', () => {
 
   cases.forEach(({ options, gPerDay }) => {
     it(JSON.stringify(options), () => {
-      expect(getGPerDay(options, crop)).to.equal(gPerDay);
+      expect(getGPerDay(options, crop)).toEqual(gPerDay);
     });
   });
 });

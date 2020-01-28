@@ -11,7 +11,7 @@ const sassLoader = {
 
 module.exports = {
   entry: {
-    app: './src/app.js',
+    app: './src/app.ts',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
