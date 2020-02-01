@@ -151,8 +151,7 @@
 import 'vue-router';
 
 import sortBy from 'lodash/fp/sortBy';
-import mapValues from 'lodash/mapValues'; // eslint-disable-line lodash-fp/use-fp
-import Vue, { ComputedOptions } from 'vue';
+import { createComponent, getCurrentInstance, Ref, computed } from '@vue/composition-api';
 
 import { createCrop, growsInSeason } from '@/crop';
 import CropComponent from '@/Crop.vue';
@@ -199,47 +198,32 @@ const FERTILIZERS: { [key: string]: Fertilizer } = {
   },
 };
 
-interface Dict<T> {
-  [key: string]: T;
-}
-
-export type Accessors<T> = {
-  [K in keyof T]: ComputedOptions<string>;
-};
-
-interface QueryParamOptions {
-  param?: string;
-  defaultVal?: string;
-  alsoSet?: { [param: string]: string };
-}
-
-function mapQueryParams<V extends Vue, T extends Dict<QueryParamOptions>>(
-  options: T
-): Accessors<T> {
-  return mapValues(
-    options,
-    ({ param, defaultVal = '' }: QueryParamOptions = {}, key: string) => ({
-      get(this: V): string {
-        const value = this.$route.query[param || key] as string | undefined;
-        return value !== undefined ? value : defaultVal;
-      },
-      set(this: V, newValue: string): void {
-        this.$router.replace({
-          path: this.$route.path,
-          query: {
-            ...this.$route.query,
-            [param || key]: newValue === defaultVal ? undefined : newValue,
-          },
-        });
-      },
-    })
-  );
+function useQueryParam(queryParam: string, defaultValue = ''): Ref<string> {
+  const vm = getCurrentInstance();
+  if (!vm) {
+    throw Error('Must be called from inside setup()!');
+  }
+  return computed<string>({
+    get(): string {
+      const value = vm.$route.query[queryParam] as string | undefined;
+      return value !== undefined ? value : defaultValue;
+    },
+    set(newValue: string): void {
+      vm.$router.replace({
+        path: vm.$route.path,
+        query: {
+          ...vm.$route.query,
+          [queryParam]: newValue === defaultValue ? undefined : newValue,
+        },
+      });
+    },
+  });
 }
 
 const seasonFromName = (seasonName: string): number =>
   ['greenhouse', 'spring', 'summer', 'fall'].indexOf(seasonName);
 
-export default Vue.extend({
+export default createComponent({
   components: {
     Crop: CropComponent,
   },
@@ -252,34 +236,19 @@ export default Vue.extend({
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
   },
-  data: () => ({
-    VERSION: VERSION,
-    baseCrops: baseCrops as BaseCrop[],
-  }),
+  setup() {
+    return {
+      VERSION: VERSION,
+      baseCrops: baseCrops as BaseCrop[],
+      seasonName: useQueryParam('season', 'spring'),
+      fertilizer: useQueryParam('fertilizer', 'none'),
+      processing: useQueryParam('processing', 'none'),
+      timeOption: useQueryParam('time', 'combined'),
+      level: useQueryParam('level', '10'),
+      skipProcessing: useQueryParam('skip', 'none'),
+    };
+  },
   computed: {
-    ...mapQueryParams({
-      seasonName: {
-        param: 'season',
-        defaultVal: 'spring',
-      },
-      fertilizer: {
-        defaultVal: 'none',
-      },
-      processing: {
-        defaultVal: 'none',
-      },
-      timeOption: {
-        param: 'time',
-        defaultVal: 'combined',
-      },
-      level: {
-        defaultVal: '10',
-      },
-      skipProcessing: {
-        param: 'skip',
-        defaultVal: 'none',
-      },
-    }),
     time(): string {
       return this.processing === 'none' ? 'growth' : this.timeOption;
     },
@@ -288,7 +257,7 @@ export default Vue.extend({
     },
     options(): Options {
       return {
-        season: this.season,
+        season: this.season.value,
         fertilizer: FERTILIZERS[this.fertilizer] as Fertilizer,
         processing: this.processing as ProcessingOption,
         time: this.time as TimeOption,

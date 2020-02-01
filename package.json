@@ -25,6 +25,7 @@
     }
   },
   "dependencies": {
+    "@vue/composition-api": "^0.3.4",
     "lodash": "^4.17.15",
     "normalize.css": "^8.0.1",
     "vue": "^2.6.11",
