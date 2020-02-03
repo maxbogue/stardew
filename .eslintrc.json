@@ -51,11 +51,19 @@
     },
     "overrides": [{
         "files": ["*.ts", "*.vue"],
-        "plugins": ["@typescript-eslint"],
+        "plugins": [
+          "@typescript-eslint",
+          "prettier",
+          "vue"
+        ],
         "extends": [
+            "eslint:recommended",
             "plugin:@typescript-eslint/eslint-recommended",
             "plugin:@typescript-eslint/recommended",
-            "plugin:vue/recommended"
+            "plugin:vue/recommended",
+            "prettier",
+            "prettier/@typescript-eslint",
+            "prettier/vue"
         ],
         "parserOptions": {
             "parser": "@typescript-eslint/parser",
