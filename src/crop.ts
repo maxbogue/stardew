@@ -1,15 +1,17 @@
 import curry from 'lodash/fp/curry';
 
-import {
+import type {
   BaseCrop,
-  Category,
   Crop,
   Options,
   Processing,
+} from './types';
+import {
+  Category,
   Season,
   SkipProcessing,
   TimeOption,
-} from '@/types';
+} from './types';
 
 const SEED_MAKER_AVERAGE_YIELD = 2 * 0.975;
 

@@ -1,4 +1,1 @@
-dist/**
-!dist/index.html
-!dist/stardrop.png
 node_modules/

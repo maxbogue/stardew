@@ -1,68 +1,67 @@
 <template>
-  <div :class="$style.crop">
+  <div class="crop">
     <div
-      v-ripple.400="'rgba(255, 255, 255, 0.25)'"
       role="button"
-      :aria-expanded="showInfo.toString()"
-      :class="$style.bar"
+      :aria-expanded="showInfo"
+      class="bar"
       :style="barStyles"
       @click="showInfo = !showInfo"
     >
       <div>
-        <span :class="$style.name">{{ crop.name }}</span>
-        <span v-if="notes" :class="$style.notes">{{ notes }}</span>
+        <span class="name">{{ crop.name }}</span>
+        <span v-if="notes" class="notes">{{ notes }}</span>
       </div>
-      <span>{{ crop.gPerDay | twoDecimals }}</span>
+      <span>{{ twoDecimals(crop.gPerDay) }}</span>
     </div>
     <Drawer :show="showInfo">
-      <ul :class="$style.infos">
-        <li :class="$style.info">
+      <ul class="infos">
+        <li class="info">
           <div>Seed Cost</div>
-          <div>{{ crop.seedPrice | wholeNumber }}g</div>
+          <div>{{ wholeNumber(crop.seedPrice) }}g</div>
         </li>
-        <li :class="$style.info">
+        <li class="info">
           <div>Sell Value</div>
-          <div>{{ crop.sellPrice | wholeNumber }}g</div>
+          <div>{{ wholeNumber(crop.sellPrice) }}g</div>
         </li>
-        <li v-if="crop.artisanSellPrice" :class="$style.info">
+        <li v-if="crop.artisanSellPrice" class="info">
           <div>Artisan Value</div>
-          <div>{{ crop.artisanSellPrice | wholeNumber }}g</div>
+          <div>{{ wholeNumber(crop.artisanSellPrice) }}g</div>
         </li>
-        <li v-if="!isGreenhouse || !crop.regrowth" :class="$style.info">
+        <li v-if="!isGreenhouse || !crop.regrowth" class="info">
           <div>Growth</div>
-          <div>{{ crop.growth | wholeNumber }} days</div>
+          <div>{{ wholeNumber(crop.growth) }} days</div>
         </li>
-        <li v-if="crop.regrowth" :class="$style.info">
+        <li v-if="crop.regrowth" class="info">
           <div>Regrowth</div>
-          <div>{{ crop.regrowth | wholeNumber }} days</div>
+          <div>{{ wholeNumber(crop.regrowth) }} days</div>
         </li>
-        <li v-if="!isGreenhouse" :class="$style.info">
+        <li v-if="!isGreenhouse" class="info">
           <div>Harvests</div>
           <div>{{ crop.harvests }}</div>
         </li>
-        <li :class="$style.info">
+        <li class="info">
           <div>Yield</div>
           <div>{{ crop.harvests * crop.yield }}</div>
         </li>
-        <li :class="$style.info">
+        <li class="info">
           <div>Revenue</div>
-          <div>{{ crop.revenue | wholeNumber }}g</div>
+          <div>{{ wholeNumber(crop.revenue) }}g</div>
         </li>
-        <li :class="$style.info">
+        <li class="info">
           <div>Costs</div>
-          <div>{{ crop.costs | wholeNumber }}g</div>
+          <div>{{ wholeNumber(crop.costs) }}g</div>
         </li>
-        <li :class="$style.info">
+        <li class="info">
           <div>Profit</div>
-          <div>{{ crop.profit | wholeNumber }}g</div>
+          <div>{{ wholeNumber(crop.profit) }}g</div>
         </li>
-        <li v-if="time !== 'processing'" :class="$style.info">
+        <li v-if="time !== 'processing'" class="info">
           <div>Growth Time</div>
-          <div>{{ crop.growthTime | wholeNumber }} days</div>
+          <div>{{ wholeNumber(crop.growthTime) }} days</div>
         </li>
-        <li v-if="time !== 'growth'" :class="$style.info">
+        <li v-if="time !== 'growth'" class="info">
           <div>Processing Time</div>
-          <div>{{ crop.processingTime | maxOneDecimal }} days</div>
+          <div>{{ maxOneDecimal(crop.processingTime) }} days</div>
         </li>
       </ul>
     </Drawer>
@@ -70,25 +69,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 
 import Drawer from './Drawer.vue';
 import { twoDecimals } from './utils';
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     Drawer,
-  },
-  filters: {
-    wholeNumber(n: number): string {
-      return Math.round(n).toLocaleString();
-    },
-    twoDecimals,
-    maxOneDecimal(n: number): string {
-      return n.toLocaleString(undefined, {
-        maximumFractionDigits: 1,
-      });
-    },
   },
   props: {
     crop: { type: Object, required: true },
@@ -123,10 +111,21 @@ export default Vue.extend({
       };
     },
   },
+  methods: {
+    wholeNumber(n: number): string {
+      return Math.round(n).toLocaleString();
+    },
+    twoDecimals,
+    maxOneDecimal(n: number): string {
+      return n.toLocaleString(undefined, {
+        maximumFractionDigits: 1,
+      });
+    },
+  },
 });
 </script>
 
-<style lang="scss" module>
+<style lang="scss">
 .crop {
   margin: 4px 0;
 }

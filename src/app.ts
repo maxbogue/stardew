@@ -1,21 +1,17 @@
 import './styles/app.scss';
 
-import Vue from 'vue';
-import Ripple from 'vue-ripple-directive';
-import VueRouter from 'vue-router';
+import { createApp } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
 
 import App from './App.vue';
 
-Vue.use(VueRouter);
-Vue.directive('ripple', Ripple);
+const app = createApp(App);
 
-const router = new VueRouter({
-  mode: 'history',
+const router = createRouter({
+  history: createWebHistory(),
   routes: [{ path: '/', component: App }],
 });
 
-const app = new Vue({
-  router,
-});
+app.use(router);
 
-app.$mount('#app');
+app.mount('#app');

@@ -1,6 +1,9 @@
+import { describe, expect, it } from 'vitest';
+
 import { createCrop } from '@/crop';
 import crops from '@/crops.json';
-import { BaseCrop, Options, SkipProcessing, TimeOption } from '@/types';
+import type { BaseCrop, Options } from '@/types';
+import { SkipProcessing, TimeOption } from '@/types';
 import { twoDecimals } from '@/utils';
 
 const BASE_OPTIONS: Options = {
