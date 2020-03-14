@@ -1,8 +1,8 @@
 <template>
-  <div :class="[$style.container, $style['container--' + seasonName]]">
-    <header :class="$style.card">
+  <div :class="['container', `container--${seasonName}`]">
+    <header class="card">
       <h1>Stardew Crops</h1>
-      <div :class="$style.controls">
+      <div class="controls">
         <label>
           <div>Season</div>
           <select v-model="seasonName">
@@ -48,12 +48,12 @@
         </label>
         <transition
           name="flex"
-          :enter-class="$style.flexEnter"
-          :enter-active-class="$style.flexActive"
-          :enter-to-class="$style.flexLeave"
-          :leave-class="$style.flexLeave"
-          :leave-active-class="$style.flexActive"
-          :leave-to-class="$style.flexEnter"
+          enter-class="flex-enter"
+          enter-active-class="flex-active"
+          enter-to-class="flex-leave"
+          leave-class="flex-leave"
+          leave-active-class="flex-active"
+          leave-to-class="flex-enter"
         >
           <label v-if="processing !== 'none'">
             <div>Time</div>
@@ -66,12 +66,12 @@
         </transition>
         <transition
           name="flex"
-          :enter-class="$style.flexEnter"
-          :enter-active-class="$style.flexActive"
-          :enter-to-class="$style.flexLeave"
-          :leave-class="$style.flexLeave"
-          :leave-active-class="$style.flexActive"
-          :leave-to-class="$style.flexEnter"
+          :enter-class="flex - enter"
+          :enter-active-class="flex - active"
+          :enter-to-class="flex - leave"
+          :leave-class="flex - leave"
+          :leave-active-class="flex - active"
+          :leave-to-class="flex - enter"
         >
           <label v-if="processing !== 'none'">
             <div>Skip Processing</div>
@@ -84,8 +84,8 @@
         </transition>
       </div>
     </header>
-    <main :class="[$style.card, $style.crops]">
-      <h2 :class="$style.cropsHeader">
+    <main class="card crops">
+      <h2 class="crops-header">
         <span>Crop</span>
         <span>g/day</span>
       </h2>
@@ -99,8 +99,8 @@
         :key="crop.name"
       />
     </main>
-    <footer :class="$style.card">
-      <ul :class="$style.notes">
+    <footer class="card">
+      <ul class="notes">
         <li>
           Multi-season crops are calculated assuming they are planted for all
           their seasons.
@@ -122,7 +122,7 @@
           regrowth since they last forever.
         </li>
       </ul>
-      <div :class="$style.footer">
+      <div class="footer">
         <a href="https://www.stardewvalley.net/" target="_blank" rel="noopener"
           >Stardew Valley v1.3.36</a
         >
@@ -148,11 +148,9 @@
 </template>
 
 <script lang="ts">
-import 'vue-router';
-
 import sortBy from 'lodash/fp/sortBy';
 import mapValues from 'lodash/mapValues'; // eslint-disable-line lodash-fp/use-fp
-import Vue, { ComputedOptions } from 'vue';
+import { defineComponent } from 'vue';
 
 import { createCrop, growsInSeason } from '@/crop';
 import CropComponent from '@/Crop.vue';
@@ -203,27 +201,21 @@ interface Dict<T> {
   [key: string]: T;
 }
 
-export type Accessors<T> = {
-  [K in keyof T]: ComputedOptions<string>;
-};
-
 interface QueryParamOptions {
   param?: string;
   defaultVal?: string;
   alsoSet?: { [param: string]: string };
 }
 
-function mapQueryParams<V extends Vue, T extends Dict<QueryParamOptions>>(
-  options: T
-): Accessors<T> {
+function mapQueryParams<T extends Dict<QueryParamOptions>>(options: T): any {
   return mapValues(
     options,
     ({ param, defaultVal = '' }: QueryParamOptions = {}, key: string) => ({
-      get(this: V): string {
+      get(this: any): string {
         const value = this.$route.query[param || key] as string | undefined;
         return value !== undefined ? value : defaultVal;
       },
-      set(this: V, newValue: string): void {
+      set(this: any, newValue: string): void {
         this.$router.replace({
           path: this.$route.path,
           query: {
@@ -239,18 +231,9 @@ function mapQueryParams<V extends Vue, T extends Dict<QueryParamOptions>>(
 const seasonFromName = (seasonName: string): number =>
   ['greenhouse', 'spring', 'summer', 'fall'].indexOf(seasonName);
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     Crop: CropComponent,
-  },
-  filters: {
-    capitalize(value: string): string {
-      if (!value) {
-        return '';
-      }
-      value = value.toString();
-      return value.charAt(0).toUpperCase() + value.slice(1);
-    },
   },
   data: () => ({
     VERSION: VERSION,
@@ -302,7 +285,7 @@ export default Vue.extend({
     filteredCrops(): Crop[] {
       return this.crops
         .filter(growsInSeason(this.season))
-        .filter(crop => crop.gPerDay > 0);
+        .filter((crop: Crop) => crop.gPerDay > 0);
     },
     sortedCrops(): Crop[] {
       return sortBy('gPerDay', this.filteredCrops).reverse();
@@ -311,7 +294,7 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss" module>
+<style lang="scss">
 .container {
   margin: 1em auto 0;
   max-width: 820px;
@@ -392,7 +375,7 @@ export default Vue.extend({
   }
 }
 
-.cropsHeader {
+.crops-header {
   display: flex;
   justify-content: space-between;
 }
@@ -423,19 +406,19 @@ export default Vue.extend({
   }
 }
 
-.flexActive {
+.flex-active {
   overflow: hidden;
   white-space: nowrap;
   transition: all 0.4s;
 }
 
-.flexEnter {
+.flex-enter {
   flex: 0.01;
   flex: 0.00001;
   min-width: 0%;
 }
 
-.flexLeave {
+.flex-leave {
   flex: 1;
 }
 </style>

@@ -15,9 +15,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import { Prop, Watch } from 'vue-property-decorator';
+import { defineComponent } from 'vue';
 
 function doubleRaf(): Promise<void> {
   return new Promise(resolve => {
@@ -29,63 +27,65 @@ function doubleRaf(): Promise<void> {
   });
 }
 
-@Component
-export default class Drawer extends Vue {
-  $refs!: { drawer: HTMLElement };
+export default defineComponent({
+  props: {
+    show: { type: Boolean, required: true },
+  },
+  data: () => ({
+    active: false,
+    innerShow: false,
+    height: 0,
+  }),
+  computed: {
+    maxHeight(): string {
+      return this.height + 'px';
+    },
+    styles(): Record<string, string> | null {
+      if (!this.active) {
+        return null;
+      }
+      return {
+        maxHeight: this.maxHeight,
+      };
+    },
+  },
+  watch: {
+    show(): void {
+      if (this.show) {
+        this.open();
+      } else {
+        this.close();
+      }
+    },
+  },
+  methods: {
+    getDrawer(): HTMLElement {
+      return this.$refs.drawer as HTMLElement;
+    },
+    async open(): Promise<void> {
+      // Briefly override the v-show style to grab the target height.
+      const drawer = this.getDrawer();
+      drawer.style.display = 'block';
+      const height = drawer.scrollHeight;
+      drawer.style.display = '';
 
-  @Prop({ type: Boolean, required: true })
-  readonly show!: boolean;
+      this.height = 0;
+      this.active = true;
 
-  active = false;
-  innerShow = false;
-  height = 0;
+      await doubleRaf();
+      this.height = height;
+      this.innerShow = true;
+    },
+    async close(): Promise<void> {
+      this.active = true;
+      this.height = this.getDrawer().scrollHeight;
 
-  get maxHeight(): string {
-    return this.height + 'px';
-  }
-
-  get styles(): Record<string, string> | null {
-    if (!this.active) {
-      return null;
-    }
-    return {
-      maxHeight: this.maxHeight,
-    };
-  }
-
-  @Watch('show')
-  onShowChanged(val: boolean): void {
-    if (val) {
-      this.open();
-    } else {
-      this.close();
-    }
-  }
-
-  async open(): Promise<void> {
-    // Briefly override the v-show style to grab the target height.
-    const { drawer } = this.$refs;
-    drawer.style.display = 'block';
-    const height = drawer.scrollHeight;
-    drawer.style.display = '';
-
-    this.height = 0;
-    this.active = true;
-
-    await doubleRaf();
-    this.height = height;
-    this.innerShow = true;
-  }
-
-  async close(): Promise<void> {
-    this.active = true;
-    this.height = this.$refs.drawer.scrollHeight;
-
-    await doubleRaf();
-    this.height = 0;
-    this.innerShow = false;
-  }
-}
+      await doubleRaf();
+      this.height = 0;
+      this.innerShow = false;
+    },
+  },
+});
 </script>
 
 <style lang="scss" module>
