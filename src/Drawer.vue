@@ -1,14 +1,14 @@
 <template>
   <transition
     name="drawer"
-    :enter-active-class="$style.drawerActive"
-    :leave-active-class="$style.drawerActive"
+    enter-active-class="drawer-active"
+    leave-active-class="drawer-active"
     @before-enter="active = true"
     @before-leave="active = true"
     @after-enter="active = false"
     @after-leave="active = false"
   >
-    <div v-show="innerShow" ref="drawer" :class="$style.drawer" :style="styles">
+    <div v-show="innerShow" ref="drawer" class="drawer" :style="styles">
       <slot></slot>
     </div>
   </transition>
@@ -41,9 +41,6 @@ export default defineComponent({
       return this.height + 'px';
     },
     styles(): Record<string, string> | null {
-      if (!this.active) {
-        return null;
-      }
       return {
         maxHeight: this.maxHeight,
       };
@@ -88,11 +85,11 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" module>
+<style lang="scss">
 .drawer {
   overflow: auto;
 }
-.drawerActive {
+.drawer-active {
   overflow: hidden;
   transition: all 0.4s;
 }

@@ -66,12 +66,12 @@
         </transition>
         <transition
           name="flex"
-          :enter-class="flex - enter"
-          :enter-active-class="flex - active"
-          :enter-to-class="flex - leave"
-          :leave-class="flex - leave"
-          :leave-active-class="flex - active"
-          :leave-to-class="flex - enter"
+          enter-class="flex-enter"
+          enter-active-class="flex-active"
+          enter-to-class="flex-leave"
+          leave-class="flex-leave"
+          leave-active-class="flex-active"
+          leave-to-class="flex-enter"
         >
           <label v-if="processing !== 'none'">
             <div>Skip Processing</div>

@@ -1,66 +1,66 @@
 <template>
-  <div :class="$style.crop">
+  <div class="crop">
     <div
       v-ripple.400="'rgba(255, 255, 255, 0.25)'"
       role="button"
       :aria-expanded="showInfo.toString()"
-      :class="$style.bar"
+      class="bar"
       :style="barStyles"
       @click="showInfo = !showInfo"
     >
       <div>
-        <span :class="$style.name">{{ crop.name }}</span>
-        <span v-if="notes" :class="$style.notes">{{ notes }}</span>
+        <span class="name">{{ crop.name }}</span>
+        <span v-if="notes" class="notes">{{ notes }}</span>
       </div>
       <span>{{ twoDecimals(crop.gPerDay) }}</span>
     </div>
     <Drawer :show="showInfo">
-      <ul :class="$style.infos">
-        <li :class="$style.info">
+      <ul class="infos">
+        <li class="info">
           <div>Seed Cost</div>
           <div>{{ wholeNumber(crop.seedPrice) }}g</div>
         </li>
-        <li :class="$style.info">
+        <li class="info">
           <div>Sell Value</div>
           <div>{{ wholeNumber(crop.sellPrice) }}g</div>
         </li>
-        <li v-if="crop.artisanSellPrice" :class="$style.info">
+        <li v-if="crop.artisanSellPrice" class="info">
           <div>Artisan Value</div>
           <div>{{ wholeNumber(crop.artisanSellPrice) }}g</div>
         </li>
-        <li v-if="!isGreenhouse || !crop.regrowth" :class="$style.info">
+        <li v-if="!isGreenhouse || !crop.regrowth" class="info">
           <div>Growth</div>
           <div>{{ wholeNumber(crop.growth) }} days</div>
         </li>
-        <li v-if="crop.regrowth" :class="$style.info">
+        <li v-if="crop.regrowth" class="info">
           <div>Regrowth</div>
           <div>{{ wholeNumber(crop.regrowth) }} days</div>
         </li>
-        <li v-if="!isGreenhouse" :class="$style.info">
+        <li v-if="!isGreenhouse" class="info">
           <div>Harvests</div>
           <div>{{ crop.harvests }}</div>
         </li>
-        <li :class="$style.info">
+        <li class="info">
           <div>Yield</div>
           <div>{{ crop.harvests * crop.yield }}</div>
         </li>
-        <li :class="$style.info">
+        <li class="info">
           <div>Revenue</div>
           <div>{{ wholeNumber(crop.revenue) }}g</div>
         </li>
-        <li :class="$style.info">
+        <li class="info">
           <div>Costs</div>
           <div>{{ wholeNumber(crop.costs) }}g</div>
         </li>
-        <li :class="$style.info">
+        <li class="info">
           <div>Profit</div>
           <div>{{ wholeNumber(crop.profit) }}g</div>
         </li>
-        <li v-if="time !== 'processing'" :class="$style.info">
+        <li v-if="time !== 'processing'" class="info">
           <div>Growth Time</div>
           <div>{{ wholeNumber(crop.growthTime) }} days</div>
         </li>
-        <li v-if="time !== 'growth'" :class="$style.info">
+        <li v-if="time !== 'growth'" class="info">
           <div>Processing Time</div>
           <div>{{ maxOneDecimal(crop.processingTime) }} days</div>
         </li>
@@ -126,7 +126,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" module>
+<style lang="scss">
 .crop {
   margin: 4px 0;
 }
