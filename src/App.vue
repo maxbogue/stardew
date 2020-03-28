@@ -149,8 +149,8 @@
 
 <script lang="ts">
 import sortBy from 'lodash/fp/sortBy';
-import mapValues from 'lodash/mapValues'; // eslint-disable-line lodash-fp/use-fp
-import { defineComponent } from 'vue';
+import { computed, defineComponent, getCurrentInstance, Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 import { createCrop, growsInSeason } from '@/crop';
 import CropComponent from '@/Crop.vue';
@@ -197,35 +197,28 @@ const FERTILIZERS: { [key: string]: Fertilizer } = {
   },
 };
 
-interface Dict<T> {
-  [key: string]: T;
-}
-
-interface QueryParamOptions {
-  param?: string;
-  defaultVal?: string;
-  alsoSet?: { [param: string]: string };
-}
-
-function mapQueryParams<T extends Dict<QueryParamOptions>>(options: T): any {
-  return mapValues(
-    options,
-    ({ param, defaultVal = '' }: QueryParamOptions = {}, key: string) => ({
-      get(this: any): string {
-        const value = this.$route.query[param || key] as string | undefined;
-        return value !== undefined ? value : defaultVal;
-      },
-      set(this: any, newValue: string): void {
-        this.$router.replace({
-          path: this.$route.path,
-          query: {
-            ...this.$route.query,
-            [param || key]: newValue === defaultVal ? undefined : newValue,
-          },
-        });
-      },
-    })
-  );
+function useQueryParam(queryParam: string, defaultValue = ''): Ref<string> {
+  const vm = getCurrentInstance();
+  if (!vm) {
+    throw Error('Must be called from inside setup()!');
+  }
+  const router = useRouter();
+  const route = useRoute();
+  return computed<string>({
+    get(): string {
+      const value = route.value.query[queryParam] as string | undefined;
+      return value !== undefined ? value : defaultValue;
+    },
+    set(newValue: string): void {
+      router.replace({
+        path: route.value.path,
+        query: {
+          ...route.value.query,
+          [queryParam]: newValue === defaultValue ? undefined : newValue,
+        },
+      });
+    },
+  });
 }
 
 const seasonFromName = (seasonName: string): number =>
@@ -235,34 +228,19 @@ export default defineComponent({
   components: {
     Crop: CropComponent,
   },
-  data: () => ({
-    VERSION: VERSION,
-    baseCrops: baseCrops as BaseCrop[],
-  }),
+  setup() {
+    return {
+      VERSION: VERSION,
+      baseCrops: baseCrops as BaseCrop[],
+      seasonName: useQueryParam('season', 'spring'),
+      fertilizer: useQueryParam('fertilizer', 'none'),
+      processing: useQueryParam('processing', 'none'),
+      timeOption: useQueryParam('time', 'combined'),
+      level: useQueryParam('level', '10'),
+      skipProcessing: useQueryParam('skip', 'none'),
+    };
+  },
   computed: {
-    ...mapQueryParams({
-      seasonName: {
-        param: 'season',
-        defaultVal: 'spring',
-      },
-      fertilizer: {
-        defaultVal: 'none',
-      },
-      processing: {
-        defaultVal: 'none',
-      },
-      timeOption: {
-        param: 'time',
-        defaultVal: 'combined',
-      },
-      level: {
-        defaultVal: '10',
-      },
-      skipProcessing: {
-        param: 'skip',
-        defaultVal: 'none',
-      },
-    }),
     time(): string {
       return this.processing === 'none' ? 'growth' : this.timeOption;
     },
